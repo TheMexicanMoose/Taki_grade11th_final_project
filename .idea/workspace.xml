@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Music/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Encryption/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Helpers/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Main/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UI/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/GUI/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/UI_helpers/.gitkeep" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,14 +24,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets" />
