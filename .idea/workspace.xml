@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Music/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Pictures/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Encryption/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Helpers/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Main/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/.gitkeep" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +21,9 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="3B7VqFCgiQ6MHpsZYHHSpIcRNZA" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
