@@ -1,6 +1,10 @@
+from globals import *
+
 class Button:
-    def __init__(self, image,pos,text_input,font,base_color,hovering_color):
+    def __init__(self,pos,text_input,font,base_color,hovering_color,image = None,text_pos = None):
         self.image = image
+        self.sw = SIZE_WIDTH * scale
+        self.sh = SIZE_HEIGHT * scale
         self.x_pos = pos[0]
         self.y_pos = pos[1]
         self.text_input = text_input
@@ -11,7 +15,12 @@ class Button:
         if self.image is None:
             self.image = self.text
         self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
-        self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
+        if text_pos is None:
+            self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
+        else:
+            self.text_x_pos = text_pos[0]
+            self.text_y_pos = text_pos[1]
+            self.text_rect = self.text.get_rect(center=(self.text_x_pos, self.text_y_pos))
 
     def update(self,screen):
         if self.image is not None:

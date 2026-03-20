@@ -5,15 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Music/bird sound.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/button_plain_green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/button_plain_magenta.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/button_plain_orangeyellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/water.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UI/UI_helpers/gif_load.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Music/Animals/Peacock Sound.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Music/Animals/tiger_sound.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Pictures/Button_back_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Pictures/button_fx_multiuser_orange.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Pictures/dropdown.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Pictures/popup.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/GUI/Login_Sign_Up_Dropdown.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Pictures/menu_bg.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Music/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Music/bird sound.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Music/Animals/bird sound.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/globals.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/GUI/Main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Main_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/Button.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/Button.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,23 +49,57 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.Button.executor": "Run",
+    "Python.Login-Sign-Up-Dropdown.executor": "Run",
     "Python.Main_manu.executor": "Run",
     "Python.Main_menu.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Manu__ui",
-    "last_opened_file_path": "C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Pictures"
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Music/Animals"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Music\Animals" />
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Pictures" />
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Music" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Music\animals" />
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main_menu" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Taki_grade11th_final_project" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UI/GUI" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/UI/GUI/Main_menu.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.Main_menu" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

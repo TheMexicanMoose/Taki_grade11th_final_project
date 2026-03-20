@@ -1,102 +1,132 @@
 import pygame
 import random
+import os
 from UI.UI_helpers.gif_load import load_gif
 from UI.UI_helpers.Button import Button
+from UI.UI_helpers.massagebox import MassageBox
+from UI.GUI.Login_Sign_Up_Dropdown import DropDown
+from globals import *
 
 pygame.init()
 
-SIZE_WIDTH, SIZE_HEIGHT = 640, 360
-scale = 2
-
-SCREEN = pygame.display.set_mode((SIZE_WIDTH * scale, SIZE_HEIGHT * scale))
-clock = pygame.time.Clock()
-frames, durations = load_gif(r'..\..\Assets\Pictures\water.gif')
-
-scaled_up = (SIZE_WIDTH * scale, SIZE_HEIGHT * scale)
-frames = [pygame.transform.scale(f, scaled_up) for f in frames]
-
-
-
 def get_font(size):
-    font = pygame.font.Font('..\..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
-    return font
-
-def main_menu():
-    pygame.display.set_caption('Main Menu')
-    pygame.mixer.init()
-    pygame.mixer.music.load(r'..\..\Assets/Music/main_menu_music.mp3')
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.5)
-
-    bird_sound = pygame.mixer.Sound(r'..\..\Assets/Music/bird sound.mp3')
-    bird_timer = random.randint(10000, 20000)
-
-    current_frame = 0
-    elapsed = 0
-    bird_elapsed = 0
-
-    while True:
-        dt = clock.tick(60)
-        elapsed += dt
-        bird_elapsed += dt
-
-        if bird_elapsed >= bird_timer:
-            bird_sound.play()
-            bird_elapsed = 0
-            bird_timer = random.randint(10000, 20000)
-
-        if elapsed >= durations[current_frame]:
-            elapsed = 0
-            current_frame = (current_frame + 1) % len(frames)
-
-        SCREEN.fill((0, 0, 0))
-        SCREEN.blit(frames[current_frame], (0, 0))
-
-        MENU_MOOSE_POS = pygame.mouse.get_pos()
-
-        MENU_TEXT = get_font(100).render('MAIN MENU', True, "yellow")
-        MENU_RECT = MENU_TEXT.get_rect(center=(320 * scale,50 * scale))
-
-        play_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_green.png')
-        options_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_magenta.png')
-        quit_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_orangeyellow.png')
-
-        PLAY_BUTTON = Button(image=play_button_image,
-                             pos=(320 * scale,125 * scale),
-                             text_input="PLAY",
-                             font=get_font(75),
-                             base_color="#d7fcd4",
-                             hovering_color="white",
-                        )
-
-        OPTIONS_BUTTON = Button(image=options_button_image,
-                                pos=(320 * scale,190 * scale),
-                                text_input="OPTIONS",
-                                font=get_font(75),
-                                base_color="#d7fcd4",
-                                hovering_color="white",
-                        )
-
-        QUIT_BUTTON = Button(image=quit_button_image,
-                             pos=(320 * scale,255 * scale),
-                             text_input="QUIT",
-                             font=get_font(75),
-                             base_color="#d7fcd4",
-                             hovering_color="white",
-                    )
+    return pygame.font.Font(r'..\..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
 
+class MainMenu:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((SIZE_WIDTH * scale, SIZE_HEIGHT * scale))
+        self.clock = pygame.time.Clock()
+        self.frames, self.durations = load_gif(r'..\..\Assets\Pictures\water.gif')
+        scaled_up = (SIZE_WIDTH * scale, SIZE_HEIGHT * scale)
+        self.frames = [pygame.transform.scale(f, scaled_up) for f in self.frames]
+
+        pygame.mixer.init()
+        pygame.mixer.music.load(r'..\..\Assets/Music/main_menu_music.mp3')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.5)
+
+        self.files = [f for f in os.listdir("../../Assets/Music/Animals") if f.endswith('.mp3')]
+        random_song = random.choice(self.files)
+        self.animal_sound = pygame.mixer.Sound(f'../../Assets/Music/Animals/{random_song}')
+        self.animal_sound.set_volume(0.5)
+        self.animal_timer = random.randint(5000, 10000)
+
+        self.play_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_green.png')
+        self.options_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_magenta.png')
+        self.quit_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_orangeyellow.png')
+        self.user_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_fx_multiuser_orange.png')
+
+        self.current_frame = 0
+        self.elapsed = 0
+        self.animal_elapsed = 0
 
 
-        SCREEN.blit(MENU_TEXT, MENU_RECT)
+    def build_buttons(self):
+        user_button = Button(
+            pos=(45 * scale, 45 * scale),
+            text_input="LOGIN/SIGH UP",
+            font=get_font(30),
+            base_color="#d7fcd4",
+            hovering_color="white",
+            image=self.user_button_image,
+            text_pos=(45 * scale, 41 * scale)
+        )
+        play_button = Button(
+            pos=(320 * scale, 125 * scale),
+            text_input="PLAY",
+            font=get_font(75),
+            base_color="#d7fcd4",
+            hovering_color="white",
+            image=self.play_button_image
+        )
+        options_button = Button(
+            pos=(320 * scale, 190 * scale),
+            text_input="OPTIONS",
+            font=get_font(75),
+            base_color="#d7fcd4",
+            hovering_color="white",
+            image=self.options_button_image
+        )
+        quit_button = Button(
+            pos=(320 * scale, 255 * scale),
+            text_input="QUIT",
+            font=get_font(75),
+            base_color="#d7fcd4",
+            hovering_color="white",
+            image=self.quit_button_image
+        )
+        return [play_button, options_button, quit_button, user_button]
 
-        for button in [PLAY_BUTTON, OPTIONS_BUTTON,QUIT_BUTTON]:
-            button.changeColor(MENU_MOOSE_POS)
-            button.update(SCREEN)
+    def run(self):
+        while True:
+            pygame.display.set_caption('Main Menu')
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            dt = self.clock.tick(60)
+            self.elapsed += dt
+            self.animal_elapsed += dt
 
-        pygame.display.flip()
-main_menu()
+            if self.animal_elapsed >= self.animal_timer:
+                self.animal_sound.play()
+                random_song = random.choice(self.files)
+                self.animal_sound = pygame.mixer.Sound(f'../../Assets/Music/Animals/{random_song}')
+                self.animal_elapsed = 0
+                self.animal_timer = random.randint(10000, 20000)
+
+            if self.elapsed >= self.durations[self.current_frame]:
+                self.elapsed = 0
+                self.current_frame = (self.current_frame + 1) % len(self.frames)
+
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(self.frames[self.current_frame], (0, 0))
+
+            mouse_pos = pygame.mouse.get_pos()
+
+            menu_text = get_font(100).render('MAIN MENU', True, "yellow")
+            menu_rect = menu_text.get_rect(center=(320 * scale, 50 * scale))
+            self.screen.blit(menu_text, menu_rect)
+
+            for button in self.build_buttons():
+                button.changeColor(mouse_pos)
+                button.update(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.build_buttons()[0].checkForInputs(mouse_pos):
+                        if is_logged_in:
+                            pass
+                        else:
+                            MassageBox(self.screen,"Error","pls sigh in \n to play")
+                    elif self.build_buttons()[2].checkForInputs(mouse_pos):
+                        pygame.quit()
+                    elif self.build_buttons()[3].checkForInputs(mouse_pos):
+                        DropDown(screen=self.screen)
+
+
+
+            pygame.display.flip()
+
+
+MainMenu().run()
