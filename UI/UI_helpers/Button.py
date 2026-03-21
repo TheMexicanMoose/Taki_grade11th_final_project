@@ -1,10 +1,6 @@
-from globals import *
-
 class Button:
     def __init__(self,pos,text_input,font,base_color,hovering_color,image = None,text_pos = None):
         self.image = image
-        self.sw = SIZE_WIDTH * scale
-        self.sh = SIZE_HEIGHT * scale
         self.x_pos = pos[0]
         self.y_pos = pos[1]
         self.text_input = text_input

@@ -5,20 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Music/Animals/Peacock Sound.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Music/Animals/tiger_sound.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/Button_back_red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/button_fx_multiuser_orange.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/dropdown.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/popup.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UI/GUI/Login_Sign_Up_Dropdown.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Pictures/box.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Pictures/input_box.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/UI_helpers/Text_Input.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Music/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Music/bird sound.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Music/Animals/bird sound.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/globals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Pictures/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Pictures/Button_back_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Pictures/Buttons/Button_back_red.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Pictures/button_fx_multiuser_orange.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Pictures/Buttons/button_fx_multiuser_orange.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Pictures/button_plain_green.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Pictures/Buttons/button_plain_green.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Pictures/button_plain_magenta.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Pictures/Buttons/button_plain_magenta.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Pictures/button_plain_orangeyellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Pictures/Buttons/button_plain_orangeyellow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Login_Sign_Up_Dropdown.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Login_Sign_Up_Dropdown.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/GUI/Main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Main_menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/.gitkeep" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/UI_helpers/Button.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/Button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/globals.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,27 +47,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Button.executor": "Run",
-    "Python.Login-Sign-Up-Dropdown.executor": "Run",
-    "Python.Main_manu.executor": "Run",
-    "Python.Main_menu.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Music/Animals"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Button.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login-Sign-Up-Dropdown.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_manu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Text_Input.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Pictures&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Music\Animals" />
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Pictures" />
+      <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Music\Animals" />
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Music" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Pictures\buttons" />
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Music\animals" />
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets" />
     </key>

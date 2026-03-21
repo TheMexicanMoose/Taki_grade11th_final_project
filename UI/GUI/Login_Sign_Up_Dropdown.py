@@ -1,5 +1,6 @@
 import pygame
 from UI.UI_helpers.Button import Button
+from UI.GUI.Login import Login
 from globals import *
 
 def get_font(size):
@@ -15,15 +16,13 @@ class DropDown:
 
         self.final_center = (129 * scale, 160 * scale)
         self.dropdown_rect.center = (129 * scale, 160 * scale)
-        #self.dropdown_rect.center = (129 * scale,160*scale)
         self.overlay = pygame.Surface((SIZE_WIDTH * scale, SIZE_HEIGHT * scale), pygame.SRCALPHA)
         self.overlay.fill((0, 0, 0, 180))
         self.title = "login/sign-up"
 
-        self.login_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_orangeyellow.png')
-        self.sighup_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_magenta.png')
-
-        self.exit_button_image = pygame.image.load(r'../../Assets/Pictures/Button_back_red.png')
+        self.login_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
+        self.sighup_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_magenta.png')
+        self.exit_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/Button_back_red.png')
         self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
 
         self.animation_speed = 12
@@ -89,6 +88,8 @@ class DropDown:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if not self.animating and self.build_button()[0].checkForInputs(mouse_pos):
+                        Login(self.screen,self.background_snapshot)
                     if not self.animating and self.build_button()[2].checkForInputs(mouse_pos):
                         return
 

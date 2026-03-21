@@ -32,10 +32,10 @@ class MainMenu:
         self.animal_sound.set_volume(0.5)
         self.animal_timer = random.randint(5000, 10000)
 
-        self.play_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_green.png')
-        self.options_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_magenta.png')
-        self.quit_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_plain_orangeyellow.png')
-        self.user_button_image = pygame.image.load(r'..\..\Assets\Pictures\button_fx_multiuser_orange.png')
+        self.play_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_green.png')
+        self.options_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_magenta.png')
+        self.quit_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
+        self.user_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_fx_multiuser_orange.png')
 
         self.current_frame = 0
         self.elapsed = 0

@@ -22,13 +22,14 @@ class MassageBox:
         self.overlay = pygame.Surface((SIZE_WIDTH * scale, SIZE_HEIGHT * scale), pygame.SRCALPHA)
         self.overlay.fill((0, 0, 0, 180))
 
+        self.exit_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/Button_back_red.png')
+        self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
+
         self.background_snapshot = self.screen.copy()
         self.run()
 
-    def build_buttons(self):
 
-        exit_button_image = pygame.image.load(r'../../Assets/Pictures/Button_back_red.png')
-        exit_button_image = pygame.transform.flip(exit_button_image, True, False)
+    def build_buttons(self):
 
         exit_button = Button(
             pos=(590 * scale, 35 * scale),
@@ -36,7 +37,7 @@ class MassageBox:
             font=get_font(30),
             base_color="#d7fcd4",
             hovering_color="white",
-            image=exit_button_image,
+            image=self.exit_button_image,
             text_pos=(45 * scale, 41 * scale)
         )
 
