@@ -10,36 +10,41 @@ from globals import *
 pygame.init()
 
 def get_font(size):
-    return pygame.font.Font(r'..\..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
+    return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
 
 class MainMenu:
-    def __init__(self):
-        self.screen = pygame.display.set_mode((SIZE_WIDTH * scale, SIZE_HEIGHT * scale))
+    def __init__(self,screen,sock,key,ui_queue):
+        self.ui_queue = ui_queue
+        self.screen = screen
         self.clock = pygame.time.Clock()
-        self.frames, self.durations = load_gif(r'..\..\Assets\Pictures\water.gif')
+        self.frames, self.durations = load_gif(r'..\Assets\Pictures\water.gif')
         scaled_up = (SIZE_WIDTH * scale, SIZE_HEIGHT * scale)
         self.frames = [pygame.transform.scale(f, scaled_up) for f in self.frames]
+        self.sock = sock
+        self.key = key
 
         pygame.mixer.init()
-        pygame.mixer.music.load(r'..\..\Assets/Music/main_menu_music.mp3')
+        pygame.mixer.music.load(r'..\Assets/Music/main_menu_music.mp3')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.5)
 
-        self.files = [f for f in os.listdir("../../Assets/Music/Animals") if f.endswith('.mp3')]
+        self.files = [f for f in os.listdir("../Assets/Music/Animals") if f.endswith('.mp3')]
         random_song = random.choice(self.files)
-        self.animal_sound = pygame.mixer.Sound(f'../../Assets/Music/Animals/{random_song}')
+        self.animal_sound = pygame.mixer.Sound(f'../Assets/Music/Animals/{random_song}')
         self.animal_sound.set_volume(0.5)
         self.animal_timer = random.randint(5000, 10000)
 
-        self.play_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_green.png')
-        self.options_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_magenta.png')
-        self.quit_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
-        self.user_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_fx_multiuser_orange.png')
+        self.play_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_green.png')
+        self.options_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_magenta.png')
+        self.quit_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
+        self.user_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_fx_multiuser_orange.png')
 
         self.current_frame = 0
         self.elapsed = 0
         self.animal_elapsed = 0
+
+        self.run()
 
 
     def build_buttons(self):
@@ -86,10 +91,16 @@ class MainMenu:
             self.elapsed += dt
             self.animal_elapsed += dt
 
+            while not self.ui_queue.empty():
+                event = self.ui_queue.get()
+                if event["where"] == "main":
+                    if event["action"] == "messagebox":
+                        MassageBox(self.screen, event["title"], event["message"])
+
             if self.animal_elapsed >= self.animal_timer:
                 self.animal_sound.play()
                 random_song = random.choice(self.files)
-                self.animal_sound = pygame.mixer.Sound(f'../../Assets/Music/Animals/{random_song}')
+                self.animal_sound = pygame.mixer.Sound(f'../Assets/Music/Animals/{random_song}')
                 self.animal_elapsed = 0
                 self.animal_timer = random.randint(10000, 20000)
 
@@ -122,11 +133,9 @@ class MainMenu:
                     elif self.build_buttons()[2].checkForInputs(mouse_pos):
                         pygame.quit()
                     elif self.build_buttons()[3].checkForInputs(mouse_pos):
-                        DropDown(screen=self.screen)
+                        DropDown(screen=self.screen,sock=self.sock,key=self.key,ui_queue=self.ui_queue)
 
 
 
             pygame.display.flip()
 
-
-MainMenu().run()

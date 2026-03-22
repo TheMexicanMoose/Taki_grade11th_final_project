@@ -1,22 +1,28 @@
 import pygame
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.Text_Input import TextInput
+from UI.UI_helpers.massagebox import MassageBox
+from Encryption.AES import *
 from globals import *
+from Helpers.tcp_by_size import *
 
 def get_font(size):
-    return pygame.font.Font(r'..\..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
+    return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
 def get_arial_font(size):
     return pygame.font.SysFont("Arial", size)
 
 class Login:
-    def __init__(self, screen, background):
+    def __init__(self, screen, background,sock,key,ui_queue):
+        self.ui_queue = ui_queue
         self.screen = screen
         self.background = background
+        self.sock = sock
+        self.key = key
 
         self.clock = pygame.time.Clock()
 
-        self.box = pygame.image.load(r'..\..\Assets\Pictures\box.PNG')
+        self.box = pygame.image.load(r'..\Assets\Pictures\box.PNG')
         self.box_rect = self.box.get_rect()
         self.box_rect.center = (320 * scale, 190 * scale)
 
@@ -24,7 +30,7 @@ class Login:
         self.overlay.fill((0, 0, 0, 180))
         self.title = "login"
 
-        self.input_box = pygame.image.load(r'..\..\Assets\Pictures\input_box.PNG')
+        self.input_box = pygame.image.load(r'..\Assets\Pictures\input_box.PNG')
 
         self.username = ""
         self.password = ""
@@ -32,9 +38,9 @@ class Login:
         self.username_active = False
         self.password_active = False
 
-        self.login_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
-        self.forgot_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_green.png')
-        self.exit_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/Button_back_red.png')
+        self.login_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
+        self.forgot_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_green.png')
+        self.exit_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/Button_back_red.png')
         self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
 
         self.text_inputs = self.build_text_area()
@@ -87,6 +93,17 @@ class Login:
 
         return [login_button, forgot_button, exit_button]
 
+    def handel_login(self,username,password,sock):
+        try:
+            to_send = f"LGN|{username}|{password}"
+            print("sending:",to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(sock, encrypted_to_send)
+        except Exception:
+            MassageBox(self.screen,"ERROR","an unexpected \n error occurred!")
+
     def run(self):
         pygame.display.set_caption(self.title)
         while True:
@@ -96,6 +113,12 @@ class Login:
             self.screen.blit(self.overlay, (0, 0))
             self.screen.blit(self.box, self.box_rect)
 
+            while not self.ui_queue.empty():
+                event = self.ui_queue.get()
+                if event["where"] == "login":
+                    if event["action"] == "messagebox":
+                        MassageBox(self.screen, event["title"], event["message"])
+
             username_text = get_font(20).render('USERNAME:', True, "red")
             username_rect = username_text.get_rect(center=(255 * scale, 100 * scale))
             self.screen.blit(username_text, username_rect)
@@ -103,6 +126,7 @@ class Login:
             password_text = get_font(20).render('PASSWORD:', True, "red")
             password_rect = password_text.get_rect(center=(255 * scale, 140 * scale))
             self.screen.blit(password_text, password_rect)
+
 
             for input_text in self.text_inputs:
                 input_text.update(self.screen)
@@ -122,6 +146,8 @@ class Login:
                     elif self.text_inputs[1].checkForInputs(mouse_pos):
                         self.password_active = True
                         self.username_active = False
+                    elif self.build_buttons()[0].checkForInputs(mouse_pos):
+                        self.handel_login(self.username,self.password,self.sock)
                     elif self.build_buttons()[2].checkForInputs(mouse_pos):
                         return
                     else:

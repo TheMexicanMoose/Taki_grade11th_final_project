@@ -2,15 +2,19 @@ import pygame
 from UI.UI_helpers.Button import Button
 from UI.GUI.Login import Login
 from globals import *
+from UI.UI_helpers.massagebox import MassageBox
 
 def get_font(size):
-    return pygame.font.Font(r'..\..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
+    return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
 class DropDown:
-    def __init__(self,screen):
+    def __init__(self,screen,sock,key,ui_queue):
+        self.ui_queue = ui_queue
         self.screen = screen
+        self.sock = sock
+        self.key = key
 
-        self.dropdown = pygame.image.load('..\..\Assets\Pictures\dropdown.PNG')
+        self.dropdown = pygame.image.load('..\Assets\Pictures\dropdown.PNG')
         self.dropdown = pygame.transform.scale(self.dropdown,(638,782))
         self.dropdown_rect = self.dropdown.get_rect()
 
@@ -20,9 +24,9 @@ class DropDown:
         self.overlay.fill((0, 0, 0, 180))
         self.title = "login/sign-up"
 
-        self.login_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
-        self.sighup_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/button_plain_magenta.png')
-        self.exit_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/Button_back_red.png')
+        self.login_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
+        self.sighup_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_magenta.png')
+        self.exit_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/Button_back_red.png')
         self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
 
         self.animation_speed = 12
@@ -76,6 +80,12 @@ class DropDown:
                         self.dropdown_rect.centery = target_y
                         self.animating = False
 
+            while not self.ui_queue.empty():
+                event = self.ui_queue.get()
+                if event["where"] == "drop":
+                    if event["action"] == "messagebox":
+                        MassageBox(self.screen, event["title"], event["message"])
+
             self.screen.blit(self.background_snapshot, (0, 0))
             self.screen.blit(self.overlay, (0, 0))
             self.screen.blit(self.dropdown, self.dropdown_rect)
@@ -89,7 +99,7 @@ class DropDown:
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not self.animating and self.build_button()[0].checkForInputs(mouse_pos):
-                        Login(self.screen,self.background_snapshot)
+                        Login(self.screen,self.background_snapshot,self.sock,self.key,self.ui_queue)
                     if not self.animating and self.build_button()[2].checkForInputs(mouse_pos):
                         return
 

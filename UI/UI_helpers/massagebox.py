@@ -5,7 +5,7 @@ from UI.UI_helpers.Button import Button
 
 
 def get_font(size):
-    return pygame.font.Font(r'..\..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
+    return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
 class MassageBox:
     def __init__(self,screen,title,message,image=None):
@@ -13,7 +13,7 @@ class MassageBox:
         self.title = title
         self.message = message
         if image is None:
-            self.image = pygame.image.load(r'..\..\Assets\Pictures\popup.png')
+            self.image = pygame.image.load(r'..\Assets\Pictures\popup.png')
         else:
             self.image = image
         self.messagebox = self.image
@@ -22,7 +22,7 @@ class MassageBox:
         self.overlay = pygame.Surface((SIZE_WIDTH * scale, SIZE_HEIGHT * scale), pygame.SRCALPHA)
         self.overlay.fill((0, 0, 0, 180))
 
-        self.exit_button_image = pygame.image.load(r'../../Assets/Pictures/Buttons/Button_back_red.png')
+        self.exit_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/Button_back_red.png')
         self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
 
         self.background_snapshot = self.screen.copy()
