@@ -91,11 +91,11 @@ class MainMenu:
             self.elapsed += dt
             self.animal_elapsed += dt
 
-            while not self.ui_queue.empty():
+            while not len(self.ui_queue) == 0:
                 event = self.ui_queue.get()
-                if event["where"] == "main":
-                    if event["action"] == "messagebox":
-                        MassageBox(self.screen, event["title"], event["message"])
+                if event.get_where() == "main":
+                    if event.get_action() == "messagebox":
+                        MassageBox(self.screen, event.get_title(), event.get_message())
 
             if self.animal_elapsed >= self.animal_timer:
                 self.animal_sound.play()

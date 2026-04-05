@@ -3,10 +3,11 @@ import pygame
 from globals import *
 from UI.UI_helpers.Button import Button
 
-
+#gets the custom font
 def get_font(size):
     return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
+# a custom MassageBox class
 class MassageBox:
     def __init__(self,screen,title,message,image=None):
         self.screen = screen
@@ -28,7 +29,7 @@ class MassageBox:
         self.background_snapshot = self.screen.copy()
         self.run()
 
-
+    #build the exit button
     def build_buttons(self):
 
         exit_button = Button(
@@ -43,9 +44,11 @@ class MassageBox:
 
         return [exit_button]
 
+    #runs the massageBox
     def run(self):
         pygame.display.set_caption(self.title)
         while True:
+            #update the mouse position every frame
             mouse_pos = pygame.mouse.get_pos()
 
             self.screen.blit(self.background_snapshot,(0,0))
@@ -60,14 +63,17 @@ class MassageBox:
             message_rect = message_text.get_rect(center=(324 * scale, 180 * scale))
             self.screen.blit(message_text, message_rect)
 
+            #chack for inputs in the buttons
             for button in self.build_buttons():
                 button.changeColor(mouse_pos)
                 button.update(self.screen)
 
             for event in pygame.event.get():
+                #chack if it should quit
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    #chack if pressed button
                     if self.build_buttons()[0].checkForInputs(mouse_pos):
                         return
 

@@ -107,6 +107,7 @@ class TextInput:
             self.cursor_timer = 0
             return True
         self.is_active = False
+        self.cursor_visible = False
         return False
 
     def addText(self, text):
@@ -127,3 +128,6 @@ class TextInput:
     def get_input(self):
         self.is_active = False
         return self.user_input
+
+    def set_active(self,active):
+        self.is_active = active

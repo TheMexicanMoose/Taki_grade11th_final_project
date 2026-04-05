@@ -4,12 +4,12 @@ import threading
 import pygame
 
 from Helpers.tcp_by_size import *
+from Helpers.UIChange import *
 from Encryption.AES import *
 from Encryption.RSA import *
 from UI.GUI.Main_menu import MainMenu
 from globals import *
 import base64
-import queue
 
 #global
 is_in_game = False
@@ -22,7 +22,7 @@ reset_code_verified = False
 key_exchanged = False
 key = generate_key()
 dh_private_key = None
-ui_queue = queue.Queue()
+ui_request = []
 
 def listen_to_server(sock: socket.socket,screen):
     global is_connected
@@ -63,7 +63,13 @@ def listen_to_server(sock: socket.socket,screen):
                 elif fields[1] in ("User does not exist", "Wrong password", "user already logged in"):
                     if fields[1] == "User does not exist":
                         fields[1] = "User does \n not exist"
-                    ui_queue.put({"where":"login","action":"messagebox","title":"Error","message":fields[1]})
+                    #ui_queue.put({"where":"login","action":"messagebox","title":"Error","message":fields[1]})
+                    ui_request.append(UIChange(
+                        where="login",
+                        action="messagebox",
+                        title="Error",
+                        message=fields[1]
+                    ))
 
             elif code == "ERPR":
                 if fields[1] == "email does not exist":
@@ -92,7 +98,7 @@ def listen_to_server(sock: socket.socket,screen):
 
 
 def main(ip):
-    global is_connected, key, is_in_game,ui_queue
+    global is_connected, key, is_in_game,ui_request
 
     sock = socket.socket()
 
@@ -117,7 +123,7 @@ def main(ip):
     while is_connected:
         if key_exchanged and not is_in_game:
             is_in_game = True
-            MainMenu(screen, sock, key,ui_queue)
+            MainMenu(screen, sock, key,ui_request)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 is_connected = False

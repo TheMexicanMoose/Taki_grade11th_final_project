@@ -1,7 +1,7 @@
 import pygame
 from PIL import Image
 
-
+#loads a gif
 def load_gif(path):
     gif = Image.open(path)
     Scenes = []

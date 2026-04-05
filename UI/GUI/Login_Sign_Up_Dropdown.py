@@ -1,6 +1,7 @@
 import pygame
 from UI.UI_helpers.Button import Button
 from UI.GUI.Login import Login
+from UI.GUI.sign_up import SignUp
 from globals import *
 from UI.UI_helpers.massagebox import MassageBox
 
@@ -80,11 +81,11 @@ class DropDown:
                         self.dropdown_rect.centery = target_y
                         self.animating = False
 
-            while not self.ui_queue.empty():
+            while not len(self.ui_queue) == 0:
                 event = self.ui_queue.get()
-                if event["where"] == "drop":
-                    if event["action"] == "messagebox":
-                        MassageBox(self.screen, event["title"], event["message"])
+                if event.get_where() == "drop":
+                    if event.get_action() == "messagebox":
+                        MassageBox(self.screen, event.get_title(), event.get_message())
 
             self.screen.blit(self.background_snapshot, (0, 0))
             self.screen.blit(self.overlay, (0, 0))
@@ -100,7 +101,9 @@ class DropDown:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not self.animating and self.build_button()[0].checkForInputs(mouse_pos):
                         Login(self.screen,self.background_snapshot,self.sock,self.key,self.ui_queue)
-                    if not self.animating and self.build_button()[2].checkForInputs(mouse_pos):
+                    elif not self.animating and self.build_button()[1].checkForInputs(mouse_pos):
+                        SignUp(self.screen,self.background_snapshot,self.sock,self.key,self.ui_queue)
+                    elif not self.animating and self.build_button()[2].checkForInputs(mouse_pos):
                         return
 
             pygame.display.flip()
