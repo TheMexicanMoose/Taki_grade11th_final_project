@@ -23,6 +23,7 @@ key_exchanged = False
 key = generate_key()
 dh_private_key = None
 ui_request = []
+lock = threading.Lock()
 
 def listen_to_server(sock: socket.socket,screen):
     global is_connected
@@ -60,15 +61,35 @@ def listen_to_server(sock: socket.socket,screen):
             elif code == "RLGN":
                 if fields[1] == "Login successful":
                     current_username = fields[2]
+                    ui_request.append(UIChange(
+                        where="login",
+                        action="logged",
+                        message=current_username
+                    ))
                 elif fields[1] in ("User does not exist", "Wrong password", "user already logged in"):
                     if fields[1] == "User does not exist":
                         fields[1] = "User does \n not exist"
-                    #ui_queue.put({"where":"login","action":"messagebox","title":"Error","message":fields[1]})
+                    # ui_queue.put({"where":"login","action":"messagebox","title":"Error","message":fields[1]})
                     ui_request.append(UIChange(
                         where="login",
                         action="messagebox",
                         title="Error",
                         message=fields[1]
+                    ))
+
+            elif code == "RSGN":
+                if fields[1] == "username already exists":
+                    ui_request.append(UIChange(
+                        where="sign",
+                        action="messagebox",
+                        title="Error",
+                        message = "username already \n exists"
+                    ))
+                else:
+                    ui_request.append(UIChange(
+                        where="sign",
+                        action="move",
+                        new="drop"
                     ))
 
             elif code == "ERPR":

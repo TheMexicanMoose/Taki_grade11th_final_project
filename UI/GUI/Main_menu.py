@@ -23,6 +23,11 @@ class MainMenu:
         self.frames = [pygame.transform.scale(f, scaled_up) for f in self.frames]
         self.sock = sock
         self.key = key
+        self.username = ""
+        self.is_logged_in = False
+
+        self.user_button_text = "LOGIN/SIGN UP"
+
 
         pygame.mixer.init()
         pygame.mixer.music.load(r'..\Assets/Music/main_menu_music.mp3')
@@ -50,7 +55,7 @@ class MainMenu:
     def build_buttons(self):
         user_button = Button(
             pos=(45 * scale, 45 * scale),
-            text_input="LOGIN/SIGH UP",
+            text_input=self.user_button_text,
             font=get_font(30),
             base_color="#d7fcd4",
             hovering_color="white",
@@ -92,7 +97,7 @@ class MainMenu:
             self.animal_elapsed += dt
 
             while not len(self.ui_queue) == 0:
-                event = self.ui_queue.get()
+                event = self.ui_queue[0]
                 if event.get_where() == "main":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
@@ -126,14 +131,24 @@ class MainMenu:
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.build_buttons()[0].checkForInputs(mouse_pos):
-                        if is_logged_in:
+                        if self.is_logged_in:
                             pass
                         else:
                             MassageBox(self.screen,"Error","pls sigh in \n to play")
                     elif self.build_buttons()[2].checkForInputs(mouse_pos):
                         pygame.quit()
                     elif self.build_buttons()[3].checkForInputs(mouse_pos):
-                        DropDown(screen=self.screen,sock=self.sock,key=self.key,ui_queue=self.ui_queue)
+                        if self.is_logged_in:
+                            pass
+                        else:
+                            result = DropDown(screen=self.screen, sock=self.sock, key=self.key, ui_queue=self.ui_queue).to_return
+                            if result is None:
+                                pass
+                            else:
+                                self.username = result
+                                self.is_logged_in = True
+                                print("logged in")
+                                self.user_button_text = "PROFILE"
 
 
 

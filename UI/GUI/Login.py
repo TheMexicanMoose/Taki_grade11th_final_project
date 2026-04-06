@@ -52,6 +52,8 @@ class Login:
 
         self.text_inputs = self.build_text_area()
 
+        self.to_return = None
+
         self.run()
 
     #build the input areas
@@ -129,9 +131,14 @@ class Login:
                 if event.get_where() == "login":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
-                        self.ui_queue.remove(event)
+                    elif event.get_action() == "logged":
+                        self.to_return = event.get_message()
+                        self.screen.blit(self.background, (0, 0))
+                        pygame.display.flip()
+                        return
                     elif event.get_action() == "":
                         pass
+                    self.ui_queue.remove(event)
 
             username_text = get_font(20).render('USERNAME:', True, "red")
             username_rect = username_text.get_rect(center=(255 * scale, 100 * scale))
@@ -172,6 +179,9 @@ class Login:
                         self.text_inputs[0].set_active(False)
 
                     elif self.build_buttons()[0].checkForInputs(mouse_pos):
+                        self.username = self.text_inputs[0].get_input()
+                        self.password = self.text_inputs[1].get_input()
+
                         if self.username == "":
                             MassageBox(self.screen,"ERROR","pls Enter \n username")
                         elif self.password == "":

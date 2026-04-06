@@ -29,18 +29,18 @@ reset_codes = {}
 log_in_users = []
 
 socket_state = {}
-socket_state_lock = threading.Lock()
+lock = threading.Lock()
 
 
 def get_state(sock):
-    with socket_state_lock:
+    with lock:
         if sock not in socket_state:
-            socket_state[sock] = {'key': b'', 'has_key': False, 'dh_private': None}
+            socket_state[sock] = {'key': b'', 'has_key': False}
         return socket_state[sock]
 
 
 def delete_state(sock):
-    with socket_state_lock:
+    with lock:
         socket_state.pop(sock, None)
 
 
@@ -51,10 +51,11 @@ def create_user(username, password, name, email):
 
 def login(sock, username, password):
     success, msg = login_user(async_mgr.users, async_mgr, sock, username, password)
-    if success and username in log_in_users:
-        msg = f'user already logged in'
-    elif success and username not in log_in_users:
-        log_in_users.append(username)
+    with lock:
+        if success and username in log_in_users:
+            msg = f'user already logged in'
+        elif success and username not in log_in_users:
+            log_in_users.append(username)
     return msg
 
 
@@ -68,7 +69,8 @@ def get_new_reset_pass_code(email):
     does_exist = chack_email(async_mgr.users, email)
     if does_exist:
         code_instance = reset_password()
-        reset_codes[email] = code_instance
+        with lock:
+            reset_codes[email] = code_instance
         return [code_instance, "got Reset Code"]
     return [None, "email does not exist"]
 
@@ -103,7 +105,8 @@ class HandleData:
         to_ret = ""
 
         if request_code == "RSA":
-            private_key, public_key = load_rsa_keys()
+            with lock:
+                private_key, public_key = load_rsa_keys()
             public_key_bytes = get_public_key_bytes(public_key)
             pub_b64 = base64.b64encode(public_key_bytes).decode()
             return f"PUBKEY|{pub_b64}".encode()
@@ -129,7 +132,8 @@ class HandleData:
             else:
                 code = should_work[0]
                 email_receiver = fields_in_data[1]
-                reset_codes[email_receiver] = code
+                with lock:
+                    reset_codes[email_receiver] = code
                 subject = "password reset"
                 body = (f"your password reset code is {code.get_code()}, "
                         f"it will work for 5 muinits")
@@ -142,7 +146,8 @@ class HandleData:
 
             for uname, value in reset_codes.items():
                 if fields_in_data[1] == value.get_code():
-                    code = reset_codes[uname]
+                    with lock:
+                        code = reset_codes[uname]
                     email = uname
 
             if code is None:
@@ -150,7 +155,8 @@ class HandleData:
             elif datetime.now() > code.get_timer():
                 to_ret = "GRPR|code expired"
             else:
-                del reset_codes[email]
+                with lock:
+                    del reset_codes[email]
                 to_ret = "GRPR|code received"
 
         elif request_code == "RNP":
@@ -170,7 +176,8 @@ class HandleData:
 
         elif request_code == "OUT":
             if fields_in_data[1] in log_in_users:
-                log_in_users.remove(fields_in_data[1])
+                with lock:
+                    log_in_users.remove(fields_in_data[1])
 
             async_mgr.put_msg_to_all(f'OMSG|{fields_in_data[1]} has left the chat', state['key'])
             to_ret = "REP"

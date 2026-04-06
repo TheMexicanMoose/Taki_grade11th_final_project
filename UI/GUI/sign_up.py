@@ -130,9 +130,12 @@ class SignUp:
                 if event.get_where() == "sign":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
-                        self.ui_queue.remove(event)
+                    elif event.get_action() == "move":
+                        if event.get_new() == "drop":
+                            return
                     elif event.get_action() == "":
                         pass
+                    self.ui_queue.remove(event)
 
             username_text = get_font(20).render('USERNAME:', True, "red")
             username_rect = username_text.get_rect(center=(255 * scale, 100 * scale))
@@ -220,6 +223,11 @@ class SignUp:
                         self.text_inputs[3].set_active(True)
 
                     elif self.build_buttons()[0].checkForInputs(mouse_pos):
+                        self.username = self.text_inputs[0].get_input()
+                        self.password = self.text_inputs[1].get_input()
+                        self.name = self.text_inputs[2].get_input()
+                        self.email = self.text_inputs[3].get_input()
+
                         if self.username == "":
                             MassageBox(self.screen, "ERROR", "pls Enter \n username")
                         elif self.password == "":
