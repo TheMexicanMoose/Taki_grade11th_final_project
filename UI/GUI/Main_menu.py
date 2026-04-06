@@ -32,12 +32,12 @@ class MainMenu:
         pygame.mixer.init()
         pygame.mixer.music.load(r'..\Assets/Music/main_menu_music.mp3')
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.set_volume(volume)
 
         self.files = [f for f in os.listdir("../Assets/Music/Animals") if f.endswith('.mp3')]
         random_song = random.choice(self.files)
         self.animal_sound = pygame.mixer.Sound(f'../Assets/Music/Animals/{random_song}')
-        self.animal_sound.set_volume(0.5)
+        self.animal_sound.set_volume(volume)
         self.animal_timer = random.randint(5000, 10000)
 
         self.play_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_green.png')

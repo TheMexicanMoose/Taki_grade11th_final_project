@@ -5,16 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/UI/GUI/Email_new_pass.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Helpers/UIChange.py" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/UIChange.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/Client.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/GUI/Login.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GUI/Login_Sign_Up_Dropdown.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Login_Sign_Up_Dropdown.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/GUI/Main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Main_menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GUI/sign_up.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/sign_up.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/globals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/users.pkl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +46,7 @@
     "Python.Button.executor": "Run",
     "Python.Client.executor": "Run",
     "Python.DataBase.executor": "Run",
+    "Python.Email_new_pass.executor": "Run",
     "Python.Login-Sign-Up-Dropdown.executor": "Run",
     "Python.Login.executor": "Run",
     "Python.Main_manu.executor": "Run",
