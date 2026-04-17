@@ -1,8 +1,9 @@
 import pygame
+
+from UI.GUI.Register_New_Pass import RegisterNewPass
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.Text_Input import TextInput
 from UI.UI_helpers.massagebox import MassageBox
-from UI.GUI.Verify_code import VerifyCode
 from Encryption.AES import *
 from globals import *
 from Helpers.tcp_by_size import *
@@ -16,7 +17,7 @@ def get_arial_font(size):
     return pygame.font.SysFont("Arial", size)
 
 #the login page
-class EmailNewPass:
+class VerifyCode:
     def __init__(self, screen, background,sock,key,ui_queue):
         self.ui_queue = ui_queue
         self.screen = screen
@@ -39,13 +40,13 @@ class EmailNewPass:
 
 
         #the user's inputs
-        self.email = ""
+        self.code = ""
         #in what box the user in
-        self.email_active = False
+        self.code_active = False
 
 
         #loads the images
-        self.email_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_green.png')
+        self.code_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_green.png')
         self.exit_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/Button_back_red.png')
         self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
 
@@ -57,24 +58,25 @@ class EmailNewPass:
 
     #build the input areas
     def build_text_area(self):
-        EMAIL = TextInput(pos=(340 * scale, 120 * scale),
+        CODE = TextInput(pos=(340 * scale, 120 * scale),
                              color="white",
                              font=get_arial_font(30),
-                             width=500,
+                             width=40,
+                             lock=True,
                              image=self.input_box,
                              padding=20)
 
 
-        return [EMAIL]
+        return [CODE]
 
     #build the button
     def build_buttons(self):
-        forgot_button = Button(pos=(320 * scale, 230 * scale),
-                               text_input="GET RESET CODE",
+        code_button = Button(pos=(320 * scale, 230 * scale),
+                               text_input="VERIFY CODE",
                                font=get_font(35),
                                base_color="#d7fcd4",
                                hovering_color="white",
-                               image=self.email_button_image)
+                               image=self.code_button_image)
 
         exit_button = Button(
             pos=(590 * scale, 35 * scale),
@@ -86,12 +88,12 @@ class EmailNewPass:
             text_pos=(45 * scale, 41 * scale)
         )
 
-        return [forgot_button, exit_button]
+        return [code_button, exit_button]
 
     #handle what to send to the server to log in
-    def handel_Email_Recognition(self,email,sock):
+    def handel_Code_Verification(self, code, sock):
         try:
-            to_send = f"ERP|{email}"
+            to_send = f"GRP|{code}"
             print("sending:",to_send)
             to_send = to_send.encode('utf-8')
             to_send = pad_massage(to_send)
@@ -112,22 +114,23 @@ class EmailNewPass:
 
             while not len(self.ui_queue) == 0:
                 event = self.ui_queue[0]
-                if event.get_where() == "email":
+                if event.get_where() == "verify":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
                         self.ui_queue.remove(event)
                     elif event.get_action() == "move":
-                        if event.get_new() == "verify":
+                        if event.get_new() == "newpass":
+                            curr_email = event.get_message()
                             self.ui_queue.remove(event)
-                            self.to_return = VerifyCode(self.screen,self.background,self.sock,self.key,self.ui_queue).to_return
+                            self.to_return = RegisterNewPass(self.screen, self.background, self.sock, self.key, self.ui_queue,curr_email).to_return
                             return
                     elif event.get_action() == "":
                         pass
 
 
-            email_text = get_font(30).render('EMAIL:', True, "red")
-            email_rect = email_text.get_rect(center=(255 * scale, 120 * scale))
-            self.screen.blit(email_text, email_rect)
+            code_text = get_font(30).render('CODE:', True, "red")
+            code_rect = code_text.get_rect(center=(255 * scale, 120 * scale))
+            self.screen.blit(code_text, code_rect)
 
 
 
@@ -144,34 +147,34 @@ class EmailNewPass:
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.text_inputs[0].checkForInputs(mouse_pos):
-                        self.email_active = True
+                        self.code_active = True
 
                         self.text_inputs[0].set_active(True)
                     elif self.build_buttons()[0].checkForInputs(mouse_pos):
-                        self.email = self.text_inputs[0].get_input()
+                        self.code = self.text_inputs[0].get_input()
 
 
-                        if self.email == "":
+                        if self.code == "":
                             MassageBox(self.screen,"ERROR","pls Enter \n Email")
                         else:
-                            self.handel_Email_Recognition(self.email, self.sock)
+                            self.handel_Code_Verification(self.code, self.sock)
                     elif self.build_buttons()[1].checkForInputs(mouse_pos):
                         return
                     else:
-                        self.email_active=False
+                        self.code_active=False
 
-                        self.email = self.text_inputs[0].get_input()
+                        self.code = self.text_inputs[0].get_input()
 
                         self.text_inputs[0].set_active(False)
 
                 if event.type == pygame.KEYDOWN:
-                    if self.email_active:
+                    if self.code_active:
 
                         if event.key == pygame.K_BACKSPACE:
                             self.text_inputs[0].removeText()
                         elif event.key == pygame.K_RETURN:
-                            self.email_active = False
-                            self.email = self.text_inputs[0].get_input()
+                            self.code_active = False
+                            self.code = self.text_inputs[0].get_input()
                         elif event.key == pygame.K_LEFT:
                             self.text_inputs[0].scroll_left()
                         elif event.key == pygame.K_RIGHT:

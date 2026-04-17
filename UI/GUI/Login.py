@@ -191,7 +191,8 @@ class Login:
                         else:
                             self.handel_login(self.username, self.password, self.sock)
                     elif self.build_buttons()[1].checkForInputs(mouse_pos):
-                        EmailNewPass(self.screen, self.background,self.sock,self.key,self.ui_queue)
+                        self.to_return = EmailNewPass(self.screen, self.background,self.sock,self.key,self.ui_queue).to_return
+                        return
                     elif self.build_buttons()[2].checkForInputs(mouse_pos):
                         return
                     else:

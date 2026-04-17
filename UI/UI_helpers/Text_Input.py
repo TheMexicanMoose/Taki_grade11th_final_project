@@ -63,13 +63,21 @@ class TextInput:
 
         if text_width > available_width:
             if self.lock:
-                while len(self.user_input) > 0:
-                    self.user_input = self.user_input[:-1]
+                if len(self.user_input) > 6:
+                    self.user_input = self.user_input[:6]
                     self.user_text = self.font.render(self.user_input, True, self.color)
-                    display_surface = self._get_display_surface()
-                    if display_surface.get_width() <= available_width:
-                        break
-                visible_text = display_surface
+
+                num_chars = len(self.user_input)
+                if num_chars > 0:
+                    spacing = available_width // (num_chars + 1)
+                    char_surface = pygame.Surface((available_width, self.font.get_height()), pygame.SRCALPHA)
+                    for i, char in enumerate(self.user_input):
+                        ch = self.font.render(char, True, self.color)
+                        x = spacing * (i + 1) - ch.get_width() // 2
+                        char_surface.blit(ch, (x, 0))
+                    visible_text = char_surface
+                else:
+                    visible_text = display_surface
             else:
                 clip_rect = pygame.Rect(
                     self.scroll_offset, 0,
@@ -77,7 +85,17 @@ class TextInput:
                 )
                 visible_text = display_surface.subsurface(clip_rect)
         else:
-            visible_text = display_surface
+            if self.lock and len(self.user_input) > 0:
+                num_chars = len(self.user_input)
+                spacing = available_width // (num_chars + 1)
+                char_surface = pygame.Surface((available_width, self.font.get_height()), pygame.SRCALPHA)
+                for i, char in enumerate(self.user_input):
+                    ch = self.font.render(char, True, self.color)
+                    x = spacing * (i + 1) - ch.get_width() // 2
+                    char_surface.blit(ch, (x, 0))
+                visible_text = char_surface
+            else:
+                visible_text = display_surface
 
         text_surface_rect = visible_text.get_rect(
             midleft=(self.user_text_rect.left + self.padding, self.user_text_rect.centery)
@@ -111,6 +129,8 @@ class TextInput:
         return False
 
     def addText(self, text):
+        if self.lock and len(self.user_input) >= 6:
+            return
         self.user_input += text
         self.user_text = self.font.render(self.user_input, True, self.color)
         available_width = self.user_text_rect.width - self.padding * 2

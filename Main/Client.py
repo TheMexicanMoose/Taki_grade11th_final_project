@@ -94,19 +94,49 @@ def listen_to_server(sock: socket.socket,screen):
 
             elif code == "ERPR":
                 if fields[1] == "email does not exist":
-                    pass
+                    ui_request.append(UIChange(
+                        where="email",
+                        action="messagebox",
+                        title="Error",
+                        message = "email does\n not exist"
+                    ))
                     current_email = ""
                 elif fields[1] == "got Reset Code":
-                    pass
+                    ui_request.append(UIChange(
+                        where="email",
+                        action="move",
+                        new="verify"
+                    ))
+                    current_email = fields[2]
 
             elif code == "GRPR":
                 if fields[1] == "code expired":
-                    pass
+                    ui_request.append(UIChange(
+                        where="verify",
+                        action="messagebox",
+                        title="Error",
+                        message="code expired"
+                    ))
                 elif fields[1] == "wrong code, try again":
-                    pass
+                    ui_request.append(UIChange(
+                        where="verify",
+                        action="messagebox",
+                        title="Error",
+                        message="wrong code,\n try again"
+                    ))
                 elif fields[1] == "code received":
-                    pass
-
+                    ui_request.append(UIChange(
+                        where="verify",
+                        action="move",
+                        new="newpass",
+                        message=current_email
+                    ))
+            elif code == "RRMP":
+                ui_request.append(UIChange(
+                    where="newpass",
+                    action="move",
+                    new="main"
+                ))
             elif code == "ERR":
                 pass
 

@@ -128,7 +128,7 @@ class HandleData:
         elif request_code == "ERP":
             should_work = get_new_reset_pass_code(fields_in_data[1])
             if should_work[0] is None:
-                to_ret = "ERPR|" + should_work[1]
+                to_ret = "ERPR|" + should_work[1] + "|" + fields_in_data[1]
             else:
                 code = should_work[0]
                 email_receiver = fields_in_data[1]
@@ -138,7 +138,7 @@ class HandleData:
                 body = (f"your password reset code is {code.get_code()}, "
                         f"it will work for 5 muinits")
                 send_email(email_receiver, subject, body)
-                to_ret = "ERPR|" + should_work[1]
+                to_ret = "ERPR|" + should_work[1] + "|" + fields_in_data[1]
 
         elif request_code == "GRP":
             code = None
