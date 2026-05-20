@@ -135,7 +135,7 @@ def listen_to_server(sock: socket.socket,screen):
                 ui_request.append(UIChange(
                     where="newpass",
                     action="move",
-                    new="main"
+                    new="drop"
                 ))
             elif code == "ERR":
                 pass

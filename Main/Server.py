@@ -5,6 +5,7 @@ import threading
 import traceback
 import queue
 import time
+import random as rnd
 
 
 from Helpers.tcp_by_size import recv_by_size, send_with_size
@@ -18,6 +19,7 @@ all_to_die = False
 async_mgr = Async()
 request_queue = queue.Queue()
 private_key = None
+rooms = []
 
 from Helpers.DataBase import *
 
@@ -35,7 +37,7 @@ lock = threading.Lock()
 def get_state(sock):
     with lock:
         if sock not in socket_state:
-            socket_state[sock] = {'key': b'', 'has_key': False}
+            socket_state[sock] = {'key': b'', 'has_key': False, "room":None}
         return socket_state[sock]
 
 
@@ -75,6 +77,69 @@ def get_new_reset_pass_code(email):
     return [None, "email does not exist"]
 
 
+
+class Room(threading.Thread):
+    def __init__(self, sock, max_players, room_name):
+        super().__init__()
+        self.room_name = room_name
+        self.sock = sock
+        self.max_players = max_players
+        self.lock = lock
+        self.players = {}#playerName:{socket:sock,is_host:bool,cards:[]}
+        self.current_card = None
+
+        self.pile = []
+        colors = ["red", "green", "blue","yellow"]
+        for color in colors:
+            self.pile.append((color, 0))
+
+            for i in range(1,10):
+                self.pile.append((color, i))
+                self.pile.append((color, i))
+
+            for action in ['SKIP', 'REVERSE', 'DRAW_TWO']:
+                self.pile.append((color, action))
+                self.pile.append((color, action))
+
+        for i in range (4):
+            self.pile.append(('WILD','CHANGE'))
+            self.pile.append(('WILD','DRAW_FOUR'))
+
+    def add_player(self, username,sock):
+        with self.lock:
+            if len(self.players) > self.max_players:
+                return 'room is full'
+            self.players[username] = {"socket":sock,"is_host":False,"cards":[]}
+            if len(self.players) == 1:
+                self.players[username]["is_host"] = True
+            return 'successfully joined'
+
+    def del_player(self, username,sock):
+        with self.lock:
+            if username in self.players:
+                del self.players[username]
+
+    def is_empty(self):
+        with self.lock:
+            return len(self.players) <= 0
+
+    def start_game(self):
+        rnd.shuffle(self.pile)
+        for i in range(8):
+            for player in self.players:
+                player["cards"].append(self.pile.pop(0))
+        self.current_card = self.pile.pop(0)
+
+
+
+    def handle_data(self,sock,fields):
+        request_code = fields[0].strip()
+        if request_code == "STR":
+            pass
+
+
+
+
 class Request:
     def __init__(self, sock, data):
         self.sock = sock
@@ -89,7 +154,7 @@ class HandleData:
 
     @property
     def handle_data(self):
-        global log_in_users, private_key
+        global log_in_users, private_key, rooms
 
         state = self.state
         has_key = state['has_key']
@@ -100,6 +165,9 @@ class HandleData:
             fields_in_data = decrypted_data.split("|")
         else:
             fields_in_data = self.data.decode().split("|")
+
+        if state['room'] is None:
+            state['room'].handle_data(self.sock, fields_in_data)
 
         request_code = fields_in_data[0].strip()
         to_ret = ""
@@ -195,6 +263,20 @@ class HandleData:
             async_mgr.put_msg_by_user(f"PMSG|{fields_in_data[1]}|{fields_in_data[3]}",
                                       fields_in_data[2], state['key'])
             to_ret = "REP"
+
+        elif request_code == "CRR":
+            if self.sock not in async_mgr.user_by_sock:
+                return self.encrypt_response("ERR|Not logged in")
+            room = Room(self.sock, 4, fields_in_data[1])
+            room.start()
+            room.add_player(fields_in_data[2], self.sock)
+            rooms.append(room)
+            state['room'] = room
+            "RCRR|room created"
+
+
+
+
 
         else:
             to_ret = "ERR|Unknown request"

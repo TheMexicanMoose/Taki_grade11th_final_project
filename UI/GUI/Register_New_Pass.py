@@ -117,7 +117,7 @@ class RegisterNewPass:
                         MassageBox(self.screen, event.get_title(), event.get_message())
                         self.ui_queue.remove(event)
                     elif event.get_action() == "move":
-                        if event.get_new() == "main":
+                        if event.get_new() == "drop":
                             self.to_return = None
                             self.ui_queue.remove(event)
                             self.screen.blit(self.background, (0, 0))
