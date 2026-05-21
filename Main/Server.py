@@ -87,6 +87,7 @@ class Room(threading.Thread):
         self.lock = lock
         self.players = {}#playerName:{socket:sock,is_host:bool,cards:[]}
         self.current_card = None
+        self.play_queue = queue.Queue()
 
         self.pile = []
         colors = ["red", "green", "blue","yellow"]
@@ -105,11 +106,11 @@ class Room(threading.Thread):
             self.pile.append(('WILD','CHANGE'))
             self.pile.append(('WILD','DRAW_FOUR'))
 
-    def add_player(self, username,sock):
+    def add_player(self, username,sock,state):
         with self.lock:
-            if len(self.players) > self.max_players:
+            if len(self.players) >= self.max_players:
                 return 'room is full'
-            self.players[username] = {"socket":sock,"is_host":False,"cards":[]}
+            self.players[username] = {"socket":sock,"is_host":False,"state":state,"cards":[]}
             if len(self.players) == 1:
                 self.players[username]["is_host"] = True
             return 'successfully joined'
@@ -126,16 +127,32 @@ class Room(threading.Thread):
     def start_game(self):
         rnd.shuffle(self.pile)
         for i in range(8):
-            for player in self.players:
+            for player in self.players.values():
                 player["cards"].append(self.pile.pop(0))
         self.current_card = self.pile.pop(0)
 
 
+    def main(self):
+        playing = True
+        while playing:
+            for player in self.players:
+                async_mgr.put_msg_by_user("TURN",player,player["state"]["key"] )
+                card = self.play_queue.get()[1]
+                if card[0] == self.current_card[0] or card[1] == self.current_card[1]:
+                    async_mgr.put_msg_to_some(f"CPLY|the new card is|{card}",player["state"]["key"],self.players)
+                    self.current_card = card
 
-    def handle_data(self,sock,fields):
+
+
+    def handle_data(self,sock,fields,state):
         request_code = fields[0].strip()
         if request_code == "STR":
-            pass
+            self.start_game()
+            async_mgr.put_msg_to_some("RSTR|the game has started",state["key"],self.players)
+        elif request_code == "PLAY":
+            self.play_queue.put(("PLAY",fields))
+
+        return None
 
 
 
@@ -167,7 +184,7 @@ class HandleData:
             fields_in_data = self.data.decode().split("|")
 
         if state['room'] is None:
-            state['room'].handle_data(self.sock, fields_in_data)
+            state['room'].handle_data(self.sock, fields_in_data,self.state)
 
         request_code = fields_in_data[0].strip()
         to_ret = ""
@@ -269,7 +286,7 @@ class HandleData:
                 return self.encrypt_response("ERR|Not logged in")
             room = Room(self.sock, 4, fields_in_data[1])
             room.start()
-            room.add_player(fields_in_data[2], self.sock)
+            room.add_player(fields_in_data[2], self.sock,self.state)
             rooms.append(room)
             state['room'] = room
             "RCRR|room created"

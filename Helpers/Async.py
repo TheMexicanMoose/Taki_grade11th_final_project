@@ -100,6 +100,17 @@ class Async:
                encrypted_to_send = encrypt(to_send, key)
                self.async_msgs[sock].append(encrypted_to_send)
 
+   def put_msg_to_some(self, data, key, users):
+       with self.lock:
+           for username, user_data in users.items():
+               sock = user_data["socket"]
+               if sock and sock in self.async_msgs:
+                   to_send = data.encode("utf-8")
+                   to_send = pad_massage(to_send)
+                   encrypted_to_send = encrypt(to_send, key)
+                   self.async_msgs[sock].append(encrypted_to_send)
+
+
 
    def get_async_messages_to_send(self, sock):
        with self.lock:

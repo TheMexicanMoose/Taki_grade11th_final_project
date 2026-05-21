@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/Client.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/Async.py" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/Async.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GUI/Register_New_Pass.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Register_New_Pass.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +25,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
