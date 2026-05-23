@@ -88,6 +88,12 @@ class Room(threading.Thread):
         self.players = {}#playerName:{socket:sock,is_host:bool,cards:[]}
         self.current_card = None
         self.play_queue = queue.Queue()
+        self.skip_next = False
+        self.two_next = False
+        self.draw_four = False
+        self.number = 1
+        self.reverse = False
+        self.reverse_player = ""
 
         self.pile = []
         colors = ["red", "green", "blue","yellow"]
@@ -134,13 +140,76 @@ class Room(threading.Thread):
 
     def main(self):
         playing = True
+        players_list = list(self.players.items())
+
         while playing:
-            for player in self.players:
-                async_mgr.put_msg_by_user("TURN",player,player["state"]["key"] )
-                card = self.play_queue.get()[1]
-                if card[0] == self.current_card[0] or card[1] == self.current_card[1]:
-                    async_mgr.put_msg_to_some(f"CPLY|the new card is|{card}",player["state"]["key"],self.players)
+            if self.reverse:
+                players_list.reverse()
+                self.reverse = False
+
+            for i,(player,info) in enumerate(players_list):
+                if self.reverse_player != player and self.reverse_player != "":
+                    continue
+                elif self.reverse_player == player:
+                    self.reverse_player = ""
+                    continue
+                elif self.skip_next:
+                    self.skip_next = False
+                elif self.two_next:
+                    if any(c[1] == "DRAW_TWO" for c in info["cards"]):
+                        async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
+                        card = self.play_queue.get()[1]
+                        if card[1] == 'DRAW_TWO':
+                            self.number+= 1
+                            self.two_next = True
+                        else:
+                            async_mgr.put_msg_by_user("CANT", player, info["state"]["key"])
+                    else:
+                        for _ in range(2 * self.number):
+                            info["cards"].append(self.pile.pop(0))
+                        self.number = 1
+                        self.two_next = False
+                elif self.draw_four:
+                    for _ in range(4):
+                        info["cards"].append(self.pile.pop(0))
+                    self.draw_four = False
+                else:
+                    async_mgr.put_msg_to_some("STOP",info["state"]["key"],self.players)
+                    async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
+                    card = self.play_queue.get()[1]
+                    if card[0] == self.current_card[0] or card[1] == self.current_card[1]:
+                        if card[1] == 'SKIP':
+                            async_mgr.put_msg_to_some(f"SKIP|{player + 1}", info["state"]["key"], self.players)
+                            self.skip_next = True
+                        elif card[1] == 'DRAW_TWO':
+                            self.two_next = True
+                        elif card[1] == 'REVERSE':
+                            self.reverse = True
+                            self.reverse_player = player
+                            self.current_card = card
+                            break
+                        else:
+                            async_mgr.put_msg_to_some(f"CPLY|the new card is|{card}", info["state"]["key"],self.players)
+                    elif card[0] == 'WILD':
+                        if card[1] == 'CHANGE':
+                            async_mgr.put_msg_by_user("CHANGE", player, info["state"]["key"])
+                            color = self.play_queue.get()
+                            if color == "yellow":
+                                self.current_card = ("YELLOW",-1)
+                            elif color == "red":
+                                self.current_card = ("RED", -1)
+                            elif color == "blue":
+                                self.current_card = ("BLUE", -1)
+                            elif color == "green":
+                                self.current_card = ("GREEN", -1)
+                        elif card[1] == 'DRAW_FOUR':
+                            self.draw_four = True
+                    else:
+                        async_mgr.put_msg_by_user("CANT", player, info["state"]["key"])
+                        continue
+
                     self.current_card = card
+
 
 
 
@@ -150,7 +219,7 @@ class Room(threading.Thread):
             self.start_game()
             async_mgr.put_msg_to_some("RSTR|the game has started",state["key"],self.players)
         elif request_code == "PLAY":
-            self.play_queue.put(("PLAY",fields))
+            self.play_queue.put(("PLAY",fields[1:]))
 
         return None
 
@@ -183,7 +252,7 @@ class HandleData:
         else:
             fields_in_data = self.data.decode().split("|")
 
-        if state['room'] is None:
+        if state['room'] is not None:
             state['room'].handle_data(self.sock, fields_in_data,self.state)
 
         request_code = fields_in_data[0].strip()
