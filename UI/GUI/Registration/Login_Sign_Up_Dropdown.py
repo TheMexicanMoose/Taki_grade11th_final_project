@@ -1,7 +1,7 @@
 import pygame
 from UI.UI_helpers.Button import Button
-from UI.GUI.Login import Login
-from UI.GUI.sign_up import SignUp
+from UI.GUI.Registration.Login import Login
+from UI.GUI.Registration.sign_up import SignUp
 from globals import *
 from UI.UI_helpers.massagebox import MassageBox
 

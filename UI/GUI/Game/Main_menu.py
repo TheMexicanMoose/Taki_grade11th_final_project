@@ -4,7 +4,7 @@ import os
 from UI.UI_helpers.gif_load import load_gif
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.massagebox import MassageBox
-from UI.GUI.Login_Sign_Up_Dropdown import DropDown
+from UI.GUI.Registration.Login_Sign_Up_Dropdown import DropDown
 from globals import *
 
 pygame.init()
