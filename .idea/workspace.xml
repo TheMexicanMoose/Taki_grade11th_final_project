@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/UI/GUI/Game/Rooms_list.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Taki_grade11th_final_project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Taki_grade11th_final_project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main/Client.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Main_menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Login_Sign_Up_Dropdown.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Login_Sign_Up_Dropdown.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Rooms_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Rooms_list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Email_new_pass.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Email_new_pass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Login.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Verify_code.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Verify_code.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,18 +30,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "TheMexicanMoose"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;TheMexicanMoose&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/TheMexicanMoose/Taki_grade11th_final_project.git",
-    "accountId": "f2d35749-dbc4-4358-a1eb-b72e78923409"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/TheMexicanMoose/Taki_grade11th_final_project.git&quot;,
+    &quot;accountId&quot;: &quot;f2d35749-dbc4-4358-a1eb-b72e78923409&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -53,29 +56,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Button.executor": "Run",
-    "Python.Client.executor": "Run",
-    "Python.DataBase.executor": "Run",
-    "Python.Email_new_pass.executor": "Run",
-    "Python.Login-Sign-Up-Dropdown.executor": "Run",
-    "Python.Login.executor": "Run",
-    "Python.Main_manu.executor": "Run",
-    "Python.Main_menu.executor": "Run",
-    "Python.Server.executor": "Run",
-    "Python.Text_Input.executor": "Run",
-    "Python.sign_up.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Pictures"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Button.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Client.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DataBase.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Email_new_pass.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login-Sign-Up-Dropdown.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_manu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Text_Input.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sign_up.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Pictures&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Pictures" />

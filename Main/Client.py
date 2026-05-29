@@ -7,7 +7,7 @@ from Helpers.tcp_by_size import *
 from Helpers.UIChange import *
 from Encryption.AES import *
 from Encryption.RSA import *
-from UI.GUI.Main_menu import MainMenu
+from UI.GUI.Game.Main_menu import MainMenu
 from globals import *
 import base64
 
@@ -149,7 +149,12 @@ def listen_to_server(sock: socket.socket,screen):
 
 
 def main(ip):
-    global is_connected, key, is_in_game,ui_request
+    global is_connected, key, is_in_game,ui_request, key_exchanged
+
+    key_exchanged = False
+    is_in_game = False
+    ui_request = []
+    key = generate_key()
 
     sock = socket.socket()
 

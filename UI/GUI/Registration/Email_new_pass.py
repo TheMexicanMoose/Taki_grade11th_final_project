@@ -2,7 +2,7 @@ import pygame
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.Text_Input import TextInput
 from UI.UI_helpers.massagebox import MassageBox
-from UI.GUI.Verify_code import VerifyCode
+from UI.GUI.Registration.Verify_code import VerifyCode
 from Encryption.AES import *
 from globals import *
 from Helpers.tcp_by_size import *

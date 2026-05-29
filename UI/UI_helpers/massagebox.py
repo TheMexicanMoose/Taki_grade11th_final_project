@@ -75,6 +75,8 @@ class MassageBox:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     #chack if pressed button
                     if self.build_buttons()[0].checkForInputs(mouse_pos):
+                        self.screen.blit(self.background_snapshot, (0, 0))
+                        pygame.display.flip()
                         return
 
             pygame.display.flip()

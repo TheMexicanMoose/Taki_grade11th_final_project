@@ -1,6 +1,8 @@
 import pygame
 import random
 import os
+
+from UI.GUI.Game.Rooms_list import RoomsList
 from UI.UI_helpers.gif_load import load_gif
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.massagebox import MassageBox
@@ -96,8 +98,8 @@ class MainMenu:
             self.elapsed += dt
             self.animal_elapsed += dt
 
-            while not len(self.ui_queue) == 0:
-                event = self.ui_queue[0]
+            while len(self.ui_queue) > 0:
+                event = self.ui_queue.pop(0)
                 if event.get_where() == "main":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
@@ -132,7 +134,7 @@ class MainMenu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.build_buttons()[0].checkForInputs(mouse_pos):
                         if self.is_logged_in:
-                            pass
+                            RoomsList(self.screen, self.sock, self.key, self.ui_queue)
                         else:
                             MassageBox(self.screen,"Error","pls sigh in \n to play")
                     elif self.build_buttons()[2].checkForInputs(mouse_pos):

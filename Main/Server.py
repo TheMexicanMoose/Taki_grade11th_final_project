@@ -443,10 +443,11 @@ class ClientHandler(threading.Thread):
                 print(f"Exception: {e}")
                 break
 
-        async_mgr.delete_socket(self.sock)
-        delete_state(self.sock)
-        print(f"Closing sock {self.cid}")
-        self.sock.close()
+        with lock:
+            async_mgr.delete_socket(self.sock)
+            delete_state(self.sock)
+            print(f"Closing sock {self.cid}")
+            self.sock.close()
 
     def client_sender(self):
         while not all_to_die and not self.finish:

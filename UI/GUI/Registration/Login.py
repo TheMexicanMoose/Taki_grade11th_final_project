@@ -2,7 +2,7 @@ import pygame
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.Text_Input import TextInput
 from UI.UI_helpers.massagebox import MassageBox
-from UI.GUI.Email_new_pass import EmailNewPass
+from UI.GUI.Registration.Email_new_pass import EmailNewPass
 from Encryption.AES import *
 from globals import *
 from Helpers.tcp_by_size import *
@@ -132,6 +132,7 @@ class Login:
                 if event.get_where() == "login":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
+                        self.ui_queue.remove(event)
                     elif event.get_action() == "logged":
                         self.to_return = event.get_message()
                         self.ui_queue.remove(event)

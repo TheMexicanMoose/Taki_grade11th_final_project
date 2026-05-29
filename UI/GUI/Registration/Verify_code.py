@@ -1,6 +1,6 @@
 import pygame
 
-from UI.GUI.Register_New_Pass import RegisterNewPass
+from UI.GUI.Registration.Register_New_Pass import RegisterNewPass
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.Text_Input import TextInput
 from UI.UI_helpers.massagebox import MassageBox
