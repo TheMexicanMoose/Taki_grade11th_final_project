@@ -2,6 +2,9 @@ import socket
 import sys
 import threading
 import pygame
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from Helpers.tcp_by_size import *
 from Helpers.UIChange import *
@@ -10,6 +13,7 @@ from Encryption.RSA import *
 from UI.GUI.Game.Main_menu import MainMenu
 from globals import *
 import base64
+import json
 
 #global
 is_in_game = False
@@ -24,6 +28,7 @@ key = generate_key()
 dh_private_key = None
 ui_request = []
 lock = threading.Lock()
+
 
 def listen_to_server(sock: socket.socket,screen):
     global is_connected
@@ -136,6 +141,19 @@ def listen_to_server(sock: socket.socket,screen):
                     where="newpass",
                     action="move",
                     new="drop"
+                ))
+            elif code == "ROOML":
+                ui_request.append(UIChange(
+                    where="room",
+                    action="new_room",
+                    data= json.loads(fields[1])
+
+                ))
+            elif code == "RJOI":
+                ui_request.append(UIChange(
+                    where="room",
+                    action="join_room",
+                    data= json.loads(fields[1])
                 ))
             elif code == "ERR":
                 pass

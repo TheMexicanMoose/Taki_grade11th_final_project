@@ -1,19 +1,22 @@
 import pygame
 
 from Helpers.tcp_by_size import send_with_size
+from UI.GUI.Game.Waiting_room import WaitingRoom
 from UI.UI_helpers.Button import Button
 from globals import *
 from UI.UI_helpers.massagebox import MassageBox
+from Encryption.AES import *
 
 def get_font(size):
     return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
 class RoomsList:
-    def __init__(self, screen, sock, key, ui_queue):
+    def __init__(self, screen, sock, key, ui_queue,username):
         self.ui_queue = ui_queue
         self.screen = screen
         self.sock = sock
         self.key = key
+        self.username = username
 
         self.dropdown = pygame.image.load('..\Assets\Pictures\dropdown.PNG')
         self.dropdown = pygame.transform.scale(self.dropdown, (1000, 782))
@@ -78,12 +81,12 @@ class RoomsList:
 
     def build_room_buttons(self):
         buttons = []
-        area_top = self.dropdown_rect.centery - 70 * scale
-        area_left = self.dropdown_rect.centerx
+        area_top = self.dropdown_rect.centery + 20 * scale
+        area_left = 210 * scale
 
-        for i, (room, current_count) in enumerate(self.rooms.items()):
+        for i, (room_name, current_count) in enumerate(self.rooms.items()):
             btn_y = area_top + i * (self.room_button_height + self.room_button_gap)
-            label = f"{room.name}   {current_count}/{room.max_players}"
+            label = f"{room_name}   {current_count}/{4}"
 
             btn = Button(
                 pos=(area_left, btn_y),
@@ -93,17 +96,46 @@ class RoomsList:
                 hovering_color="white",
                 image=self.join_button_image
             )
-            buttons.append((btn, room))
+            buttons.append((btn, room_name))
 
         return buttons
 
-    def handle_join(self, room):
-        send_with_size(self.sock, f"JOIN {room.name}")
-        self.to_return = room
+    def handle_join(self, room_name,username):
+        to_send = f"JOIN|{room_name}|{username}"
+        print("sending:", to_send)
+        to_send = to_send.encode('utf-8')
+        to_send = pad_massage(to_send)
+        encrypted_to_send = encrypt(to_send, self.key)
+        send_with_size(self.sock, encrypted_to_send)
+
+
+    def handle_room_creation(self,username):
+        try:
+            to_send = f"CRR|{username}|"
+            print("sending:", to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(self.sock, encrypted_to_send)
+
+        except Exception:
+            MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
+
+    def handle_refresh(self):
+        try:
+            to_send = f"ROOMS|"
+            print("sending:", to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(self.sock, encrypted_to_send)
+
+        except Exception:
+            MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
 
     def run(self):
         pygame.display.set_caption(self.title)
-        send_with_size(self.sock, "ROOMS")
+        self.handle_refresh()
 
         while True:
             mouse_pos = pygame.mouse.get_pos()
@@ -125,8 +157,11 @@ class RoomsList:
                     elif event.get_action() == "new_room":
                         self.rooms = event.get_data()
                         self.ui_queue.remove(event)
+                    elif event.get_action() == "join_room":
+                        WaitingRoom(self.screen,self.sock,self.key,self.ui_queue,event.get_data())
                     else:
                         self.ui_queue.remove(event)
+
                 else:
                     break
 
@@ -156,14 +191,16 @@ class RoomsList:
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not self.animating:
-                        if top_buttons[0].checkForInputs(mouse_pos):
-                            send_with_size(self.sock,"CRR")
+                        if top_buttons[1].checkForInputs(mouse_pos):
+                            self.handle_refresh()
+                        elif top_buttons[0].checkForInputs(mouse_pos):
+                            self.handle_room_creation(self.username)
                         elif top_buttons[-1].checkForInputs(mouse_pos):
                             self.to_return = None
                             return
 
-                        for btn, room in room_buttons:
+                        for btn, room_name in room_buttons:
                             if btn.checkForInputs(mouse_pos):
-                                self.handle_join(room)
+                                self.handle_join(room_name,self.username)
 
             pygame.display.flip()

@@ -130,8 +130,12 @@ class SignUp:
                 if event.get_where() == "sign":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
+                        self.ui_queue.remove(event)
                     elif event.get_action() == "move":
                         if event.get_new() == "drop":
+                            self.ui_queue.remove(event)
+                            self.screen.blit(self.background, (0, 0))
+                            pygame.display.flip()
                             return
                     elif event.get_action() == "":
                         pass

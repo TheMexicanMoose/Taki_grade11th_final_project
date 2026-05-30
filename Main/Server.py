@@ -6,6 +6,7 @@ import traceback
 import queue
 import time
 import random as rnd
+import json
 
 
 from Helpers.tcp_by_size import recv_by_size, send_with_size
@@ -80,12 +81,12 @@ def get_new_reset_pass_code(email):
 
 class Room(threading.Thread):
     def __init__(self, sock, max_players, room_name):
-        super().__init__()
+        super().__init__(daemon=True)
         self.room_name = room_name
         self.sock = sock
         self.max_players = max_players
         self.lock = lock
-        self.players = {}#playerName:{socket:sock,is_host:bool,cards:[]}
+        self.players = {}#playerName:{socket:sock,is_host:bool,cards:[],id = int}
         self.current_card = None
         self.play_queue = queue.Queue()
         self.skip_next = False
@@ -116,7 +117,7 @@ class Room(threading.Thread):
         with self.lock:
             if len(self.players) >= self.max_players:
                 return 'room is full'
-            self.players[username] = {"socket":sock,"is_host":False,"state":state,"cards":[]}
+            self.players[username] = {"socket":sock,"is_host":False,"state":state,"cards":[],"id":len(self.players)}
             if len(self.players) == 1:
                 self.players[username]["is_host"] = True
             return 'successfully joined'
@@ -136,6 +137,13 @@ class Room(threading.Thread):
             for player in self.players.values():
                 player["cards"].append(self.pile.pop(0))
         self.current_card = self.pile.pop(0)
+
+    def player_count(self):
+        with self.lock:
+            return len(self.players)
+
+    def get_name(self):
+        return self.room_name
 
     def main(self):
         playing = True
@@ -383,16 +391,34 @@ class HandleData:
         elif request_code == "CRR":
             if self.sock not in async_mgr.user_by_sock:
                 return self.encrypt_response("ERR|Not logged in")
-            room = Room(self.sock, 4, fields_in_data[1])
+            room = Room(self.sock, 4, f"{fields_in_data[1]}'s room")
             room.start()
-            room.add_player(fields_in_data[2], self.sock,self.state)
-            rooms.append(room)
-            state['room'] = room
-            "RCRR|room created"
+            room.add_player(fields_in_data[1], self.sock,self.state)
+            with lock:
+                rooms.append(room)
+                state['room'] = room
+            return self.encrypt_response("RCRR|room created")
+
+        elif request_code == "JOIN":
+            if self.sock not in async_mgr.user_by_sock:
+                return self.encrypt_response("ERR|Not logged in")
+            for room in rooms:
+                if room.get_name() == fields_in_data[1]:
+                    msg = room.add_player(fields_in_data[1], self.sock, self.state)
+                    if msg != 'successfully joined':
+                        return self.encrypt_response(f"ERR|{msg}")
+
+                    players = {name: info["id"] for name, info in room.players.items()}
+                    return self.encrypt_response(f"RJOI|{fields_in_data[1]}|" + json.dumps(players))
+            return self.encrypt_response("ERR|Unknown room")
 
 
 
-
+        elif request_code == "ROOMS":
+            room_list = {}
+            for room in rooms:
+                room_list[room.get_name()] = room.player_count()
+            return self.encrypt_response("ROOML|" + json.dumps(room_list))
 
         else:
             to_ret = "ERR|Unknown request"

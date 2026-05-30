@@ -134,7 +134,7 @@ class MainMenu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.build_buttons()[0].checkForInputs(mouse_pos):
                         if self.is_logged_in:
-                            RoomsList(self.screen, self.sock, self.key, self.ui_queue)
+                            RoomsList(self.screen, self.sock, self.key, self.ui_queue,self.username)
                         else:
                             MassageBox(self.screen,"Error","pls sigh in \n to play")
                     elif self.build_buttons()[2].checkForInputs(mouse_pos):

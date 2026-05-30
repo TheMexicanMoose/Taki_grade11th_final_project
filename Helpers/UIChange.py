@@ -1,10 +1,11 @@
 class UIChange:
-    def __init__(self, where, action,new="", title="", message=""):
+    def __init__(self, where, action,new="", title="", message="", data = None):
         self.where = where
         self.action = action
         self.new = new
         self.title = title
         self.message = message
+        self.data = data
 
     def get_where(self):
         return self.where
@@ -20,3 +21,6 @@ class UIChange:
 
     def get_message(self):
         return self.message
+
+    def get_data(self):
+        return self.data
