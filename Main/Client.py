@@ -149,11 +149,26 @@ def listen_to_server(sock: socket.socket,screen):
                     data= json.loads(fields[1])
 
                 ))
+
+            elif code == "RCRR":
+                ui_request.append(UIChange(
+                    where="room",
+                    action="join_room",
+                    data=json.loads(fields[2])
+                ))
+
             elif code == "RJOI":
                 ui_request.append(UIChange(
                     where="room",
                     action="join_room",
-                    data= json.loads(fields[1])
+                    data= json.loads(fields[2])
+                ))
+
+            elif code == "NEW":
+                ui_request.append(UIChange(
+                    where="wait_room",
+                    action="new_player",
+                    data= {fields[1]: fields[2]}
                 ))
             elif code == "ERR":
                 pass

@@ -16,7 +16,7 @@ class WaitingRoom:
         self.screen = screen
         self.sock = sock
         self.key = key
-        self.players = players
+        self.players = dict(players)
 
 
         self.create_room_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
@@ -24,7 +24,14 @@ class WaitingRoom:
         self.exit_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/Button_back_red.png')
         self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
         self.join_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
-        self.user_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_fx_multiuser_orange.png')
+        self.player_img = [
+             pygame.image.load(r'../Assets/Pictures/name1.png'),
+             pygame.image.load(r'../Assets/Pictures/name2.png'),
+             pygame.image.load(r'../Assets/Pictures/name3.png'),
+             pygame.image.load(r'../Assets/Pictures/name1.png'),
+            ]
+
+        self.player_slots = [(100,200),(300,20),(450,200),(300,300)]
 
         self.title = "Waiting Room"
 
@@ -49,6 +56,18 @@ class WaitingRoom:
 
         return [ exit_button]
 
+    def draw_players(self):
+        for username, player_id in self.players.items():
+            pos_x ,pos_y = self.player_slots[player_id]
+
+            img = self.player_img[player_id]
+            self.screen.blit(img, (pos_x * scale, pos_y * scale))
+
+            img_w = img.get_width()
+            name = get_font(30).render(username, True, (255, 255, 255))
+            self.screen.blit(name, (pos_x * scale + 8, pos_y * scale))
+
+
 
 
     def run(self):
@@ -61,11 +80,15 @@ class WaitingRoom:
 
             while self.ui_queue:
                 event = self.ui_queue[0]
-                if event.get_where() == "room":
+                if event.get_where() == "wait_room":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
                         self.ui_queue.remove(event)
-                    elif event.get_action() == "new_room":
+                    elif event.get_action() == "new_player":
+                        new_player = event.get_data()
+                        if new_player:
+                            self.players = dict(new_player)
+
                         self.ui_queue.remove(event)
                     else:
                         self.ui_queue.remove(event)
@@ -73,12 +96,7 @@ class WaitingRoom:
                     break
 
             self.screen.blit(self.background, (0, 0))
-
-            for player, ids in self.players.items():
-                if ids == 1:
-                    self.screen.blit(self.user_image,(200,200))
-
-
+            self.draw_players()
 
             buttons = self.build_button()
             for button in buttons:

@@ -117,9 +117,13 @@ class Room(threading.Thread):
         with self.lock:
             if len(self.players) >= self.max_players:
                 return 'room is full'
-            self.players[username] = {"socket":sock,"is_host":False,"state":state,"cards":[],"id":len(self.players)}
+            ids = len(self.players)
+            self.players[username] = {"socket":sock,"is_host":False,"state":state,"cards":[],"id":ids}
             if len(self.players) == 1:
                 self.players[username]["is_host"] = True
+            for i, (player, info) in enumerate(self.players.items()):
+                if player != username:
+                    async_mgr.put_msg_by_user(f"NEW|{username}|{ids}", player, info["state"]["key"])
             return 'successfully joined'
 
     def del_player(self, username,sock):
@@ -397,7 +401,8 @@ class HandleData:
             with lock:
                 rooms.append(room)
                 state['room'] = room
-            return self.encrypt_response("RCRR|room created")
+            players = {name: info["id"] for name, info in room.players.items()}
+            return self.encrypt_response("RCRR|room created|" + json.dumps(players))
 
         elif request_code == "JOIN":
             if self.sock not in async_mgr.user_by_sock:
