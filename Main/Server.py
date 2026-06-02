@@ -126,13 +126,17 @@ class Room(threading.Thread):
                     async_mgr.put_msg_by_user(f"NEW|{username}|{ids}", player, info["state"]["key"])
             return 'successfully joined'
 
-    def del_player(self, username,sock):
+    def del_player(self, username,state):
         with self.lock:
             if username in self.players:
                 del self.players[username]
 
+        with lock:
+            state["room"] = None
+
         if self.is_empty():
             with lock:
+                print(self in rooms)
                 if self in rooms:
                     rooms.remove(self)
 
@@ -259,7 +263,9 @@ class Room(threading.Thread):
 
 
     def handle_data(self,sock,fields,state):
-        request_code = fields[0].strip()
+        request_code = fields[0]
+        if request_code == "DEL":
+            self.del_player(fields[1],state)
         if request_code == "STR":
             self.start_game()
             async_mgr.put_msg_to_some("RSTR|the game has started",state["key"],self.players)
@@ -416,6 +422,8 @@ class HandleData:
                 if room.get_name() == fields_in_data[1]:
                     username = async_mgr.user_by_sock[self.sock]
                     msg = room.add_player(username, self.sock, self.state)
+                    with lock:
+                        self.state['room'] = room
                     if msg != 'successfully joined':
                         return self.encrypt_response(f"ERR|{msg}")
 

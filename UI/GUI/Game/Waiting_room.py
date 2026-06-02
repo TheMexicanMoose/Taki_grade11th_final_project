@@ -11,12 +11,13 @@ def get_font(size):
     return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
 class WaitingRoom:
-    def __init__(self, screen, sock, key, ui_queue,players):
+    def __init__(self, screen, sock, key, ui_queue,players, username):
         self.ui_queue = ui_queue
         self.screen = screen
         self.sock = sock
         self.key = key
         self.players = dict(players)
+        self.username = username
 
         self.host = False
 
@@ -32,7 +33,7 @@ class WaitingRoom:
              pygame.image.load(r'../Assets/Pictures/name1.png'),
              pygame.image.load(r'../Assets/Pictures/name2.png'),
              pygame.image.load(r'../Assets/Pictures/name3.png'),
-             pygame.image.load(r'../Assets/Pictures/name1.png'),
+             pygame.image.load(r'../Assets/Pictures/name2.png'),
             ]
 
         self.player_slots = [(100,200),(300,20),(450,200),(300,300)]
@@ -43,6 +44,8 @@ class WaitingRoom:
 
 
         self.background = pygame.image.load(r'../Assets/Pictures/uno_background.jpg')
+        self.crown = pygame.image.load(r'../Assets/Pictures/crown.png')
+
         self.run()
 
     def build_button(self):
@@ -82,20 +85,25 @@ class WaitingRoom:
             img = self.player_img[player_id]
             self.screen.blit(img, (pos_x * scale, pos_y * scale))
 
-            img_w = img.get_width()
             name = get_font(30).render(username, True, (255, 255, 255))
-            self.screen.blit(name, (pos_x * scale + 8, pos_y * scale))
+            self.screen.blit(name, (pos_x * scale + 70, pos_y * scale + 15))
 
+    def handle_del(self,username):
+        try:
+            to_send = f"DEL|{username}"
+            print("sending:", to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(self.sock, encrypted_to_send)
 
-
+        except Exception:
+            MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
 
     def run(self):
         pygame.display.set_caption(self.title)
-        print(len(self.players))
         if len(self.players) == 1:
-            print("hostttttt")
             self.host = True
-
 
         while True:
             mouse_pos = pygame.mouse.get_pos()
@@ -123,6 +131,7 @@ class WaitingRoom:
 
             self.screen.blit(self.background, (0, 0))
             self.draw_players()
+            self.screen.blit(self.crown, (165 * scale, 175 * scale))
 
             buttons = self.build_button()
             if self.host:
@@ -134,10 +143,13 @@ class WaitingRoom:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.handle_del(self.username)
                     pygame.quit()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if buttons[-1].checkForInputs(mouse_pos):
+
+                        self.handle_del(self.username)
                         return
 
 

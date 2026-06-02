@@ -160,7 +160,7 @@ class RoomsList:
                         self.ui_queue.remove(event)
                     elif event.get_action() == "join_room":
                         self.ui_queue.remove(event)
-                        WaitingRoom(self.screen,self.sock,self.key,self.ui_queue,event.get_data())
+                        WaitingRoom(self.screen,self.sock,self.key,self.ui_queue,event.get_data(),self.username)
                     else:
                         self.ui_queue.remove(event)
 
