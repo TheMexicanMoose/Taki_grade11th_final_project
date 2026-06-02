@@ -131,6 +131,11 @@ class Room(threading.Thread):
             if username in self.players:
                 del self.players[username]
 
+        if self.is_empty():
+            with lock:
+                if self in rooms:
+                    rooms.remove(self)
+
     def is_empty(self):
         with self.lock:
             return len(self.players) <= 0
@@ -409,7 +414,8 @@ class HandleData:
                 return self.encrypt_response("ERR|Not logged in")
             for room in rooms:
                 if room.get_name() == fields_in_data[1]:
-                    msg = room.add_player(fields_in_data[1], self.sock, self.state)
+                    username = async_mgr.user_by_sock[self.sock]
+                    msg = room.add_player(username, self.sock, self.state)
                     if msg != 'successfully joined':
                         return self.encrypt_response(f"ERR|{msg}")
 
@@ -486,6 +492,7 @@ class ClientHandler(threading.Thread):
                 msgs = async_mgr.get_async_messages_to_send(self.sock)
                 for msg in msgs:
                     send_with_size(self.sock, msg)
+
                 time.sleep(0.05)
             except socket.error:
                 break

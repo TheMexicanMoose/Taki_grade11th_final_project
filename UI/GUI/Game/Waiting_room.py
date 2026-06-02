@@ -18,8 +18,12 @@ class WaitingRoom:
         self.key = key
         self.players = dict(players)
 
+        self.host = False
 
-        self.create_room_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
+        print("hello")
+
+
+        self.start_room_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_orangeyellow.png')
         self.refresh_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/button_plain_magenta.png')
         self.exit_button_image = pygame.image.load(r'../Assets/Pictures/Buttons/Button_back_red.png')
         self.exit_button_image = pygame.transform.flip(self.exit_button_image, True, False)
@@ -56,6 +60,21 @@ class WaitingRoom:
 
         return [ exit_button]
 
+    def build_start_button(self):
+
+        start_button = Button(
+            pos=(100 * scale, 300 * scale),
+            text_input="START",
+            font=get_font(30),
+            base_color="#d7fcd4",
+            hovering_color="white",
+            image=self.start_room_image,
+            text_pos=(45 * scale, 41 * scale)
+
+        )
+
+        return  start_button
+
     def draw_players(self):
         for username, player_id in self.players.items():
             pos_x ,pos_y = self.player_slots[player_id]
@@ -72,6 +91,10 @@ class WaitingRoom:
 
     def run(self):
         pygame.display.set_caption(self.title)
+        print(len(self.players))
+        if len(self.players) == 1:
+            print("hostttttt")
+            self.host = True
 
 
         while True:
@@ -80,15 +103,18 @@ class WaitingRoom:
 
             while self.ui_queue:
                 event = self.ui_queue[0]
+                print(event.get_where()  + " , " + str(type(event.get_where())))
                 if event.get_where() == "wait_room":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
                         self.ui_queue.remove(event)
                     elif event.get_action() == "new_player":
                         new_player = event.get_data()
+                        print(new_player)
                         if new_player:
-                            self.players = dict(new_player)
-
+                            for name,pid in new_player.items():
+                                self.players[name] = int(pid)
+                            print("current players:", self.players)
                         self.ui_queue.remove(event)
                     else:
                         self.ui_queue.remove(event)
@@ -99,6 +125,8 @@ class WaitingRoom:
             self.draw_players()
 
             buttons = self.build_button()
+            if self.host:
+                buttons.insert(0,self.build_start_button())
             for button in buttons:
                 button.changeColor(mouse_pos)
                 button.update(self.screen)

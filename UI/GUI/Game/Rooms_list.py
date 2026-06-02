@@ -149,6 +149,7 @@ class RoomsList:
                         self.animating = False
 
             while self.ui_queue:
+                print("hi")
                 event = self.ui_queue[0]
                 if event.get_where() == "room":
                     if event.get_action() == "messagebox":
@@ -158,6 +159,7 @@ class RoomsList:
                         self.rooms = event.get_data()
                         self.ui_queue.remove(event)
                     elif event.get_action() == "join_room":
+                        self.ui_queue.remove(event)
                         WaitingRoom(self.screen,self.sock,self.key,self.ui_queue,event.get_data())
                     else:
                         self.ui_queue.remove(event)
