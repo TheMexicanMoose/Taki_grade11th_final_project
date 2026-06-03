@@ -124,6 +124,15 @@ class WaitingRoom:
                                 self.players[name] = int(pid)
                             print("current players:", self.players)
                         self.ui_queue.remove(event)
+                    elif event.get_action() == "del_player":
+                        del_player = event.get_data()
+                        if del_player:
+                            for name,pid in self.players.items():
+                                if name == del_player:
+                                    self.players.pop(name)
+                        self.ui_queue.remove(event)
+
+
                     else:
                         self.ui_queue.remove(event)
                 else:

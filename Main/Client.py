@@ -170,6 +170,12 @@ def listen_to_server(sock: socket.socket,screen):
                     action="new_player",
                     data= {fields[1]: fields[2]}
                 ))
+            elif code == "DEL":
+                ui_request.append(UIChange(
+                    where="wait_room",
+                    action="del_player",
+                    data= fields[1]
+                ))
             elif code == "ERR":
                 pass
 

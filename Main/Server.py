@@ -266,6 +266,7 @@ class Room(threading.Thread):
         request_code = fields[0]
         if request_code == "DEL":
             self.del_player(fields[1],state)
+            async_mgr.put_msg_to_some(f"DELP|{fields[1]}", state["key"], self.players)
         if request_code == "STR":
             self.start_game()
             async_mgr.put_msg_to_some("RSTR|the game has started",state["key"],self.players)
