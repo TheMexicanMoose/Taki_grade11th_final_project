@@ -1,7 +1,7 @@
 import pygame
 
 from Helpers.tcp_by_size import send_with_size
-from UI.GUI.Game.Waiting_room import WaitingRoom
+from UI.GUI.Game.Playing_room import PlayingRoom
 from UI.UI_helpers.Button import Button
 from globals import *
 from UI.UI_helpers.massagebox import MassageBox
@@ -160,7 +160,7 @@ class RoomsList:
                         self.ui_queue.remove(event)
                     elif event.get_action() == "join_room":
                         self.ui_queue.remove(event)
-                        WaitingRoom(self.screen,self.sock,self.key,self.ui_queue,event.get_data(),self.username)
+                        PlayingRoom(self.screen, self.sock, self.key, self.ui_queue, event.get_data(), self.username)
                     else:
                         self.ui_queue.remove(event)
 

@@ -97,9 +97,8 @@ class Room(threading.Thread):
         self.reverse_player = ""
 
         self.pile = []
-        colors = ["red", "green", "blue","yellow"]
+        colors = ["RED", "GREEN", "BLUE","YELLOW"]
         for color in colors:
-            self.pile.append((color, 0))
 
             for i in range(1,10):
                 self.pile.append((color, i))
@@ -149,6 +148,8 @@ class Room(threading.Thread):
         for i in range(8):
             for player in self.players.values():
                 player["cards"].append(self.pile.pop(0))
+        for p, inf in self.players.items():
+            async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
         self.current_card = self.pile.pop(0)
 
     def player_count(self):
@@ -198,35 +199,60 @@ class Room(threading.Thread):
                     self.draw_four = False
 
                 else:
-                    async_mgr.put_msg_to_some("STOP", info["state"]["key"], self.players)
+                    for p,inf in self.players.items():
+                        async_mgr.put_msg_by_user("STOP",p, inf["state"]["key"])
+
+                    for p,inf in self.players.items():
+                        async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}",p, inf["state"]["key"])
+
                     async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
                     card = self.play_queue.get()[1]
 
                     if card[0] == self.current_card[0] or card[1] == self.current_card[1]:
                         info["cards"].remove(card)
+                        for p, inf in self.players.items():
+                            async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
+
                         if len(info["cards"]) == 0:
-                            async_mgr.put_msg_to_some(f"WIN|{player}", info["state"]["key"], self.players)
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"WIN|{p}",p, inf["state"]["key"])
                             playing = False
                             break
+
                         if card[1] == 'SKIP':
                             next_player = players_list[(i + 1) % len(players_list)][0]
-                            async_mgr.put_msg_to_some(f"SKIP|{next_player}", info["state"]["key"], self.players)
+                            for p, inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"SKIP|{next_player}",p, inf["state"]["key"])
+                            self.current_card = card
                             self.skip_next = True
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"CPLY|the new card is|{card}",p, inf["state"]["key"])
+
                         elif card[1] == 'DRAW_TWO':
                             self.two_next = True
                             self.current_card = card
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"CPLY|the new card is|{card}",p, inf["state"]["key"])
+
                         elif card[1] == 'REVERSE':
                             self.reverse = True
                             self.reverse_player = player
                             self.current_card = card
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"CPLY|the new card is|{card}",p, inf["state"]["key"])
                             break
+
                         else:
                             self.current_card = card
-                            async_mgr.put_msg_to_some(f"CPLY|the new card is|{card}", info["state"]["key"],
-                                                      self.players)
-                            async_mgr.put_msg_to_some("STOP", info["state"]["key"], self.players)
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"CPLY|the new card is|{card}",p, inf["state"]["key"])
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"STOP",p, inf["state"]["key"])
+
                     elif card[0] == 'WILD':
                         info["cards"].remove(card)
+                        for p, inf in self.players.items():
+                            async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
 
                         if card[1] == 'CHANGE':
                             async_mgr.put_msg_by_user("CHANGE", player, info["state"]["key"])
@@ -253,7 +279,8 @@ class Room(threading.Thread):
 
 
                         if len(info["cards"]) == 0:
-                            async_mgr.put_msg_to_some(f"WIN|{player}", info["state"]["key"], self.players)
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"WIN|{p}", p, inf["state"]["key"])
                             playing = False
                             break
 
@@ -266,10 +293,13 @@ class Room(threading.Thread):
         request_code = fields[0]
         if request_code == "DEL":
             self.del_player(fields[1],state)
-            async_mgr.put_msg_to_some(f"DELP|{fields[1]}", state["key"], self.players)
+            for p,inf in self.players.items():
+                print("blob")
+                async_mgr.put_msg_by_user(f"DELP|{fields[1]}",p, inf["state"]["key"])
         if request_code == "STR":
+            for p,inf in self.players.items():
+                async_mgr.put_msg_by_user(f"RSTR|the game has started",p, inf["state"]["key"])
             self.start_game()
-            async_mgr.put_msg_to_some("RSTR|the game has started",state["key"],self.players)
         elif request_code == "PLAY":
             self.play_queue.put(("PLAY",fields[1:]))
         elif request_code == "CHCO":

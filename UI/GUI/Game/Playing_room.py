@@ -1,23 +1,33 @@
 import pygame
-import json
 
 from Helpers.tcp_by_size import send_with_size
 from UI.UI_helpers.Button import Button
 from globals import *
 from UI.UI_helpers.massagebox import MassageBox
 from Encryption.AES import *
+from UI.UI_helpers.card_selector import *
 
 def get_font(size):
     return pygame.font.Font(r'..\Assets/Fonts/ThaleahFat_TTF.ttf', size)
 
-class WaitingRoom:
+class PlayingRoom:
     def __init__(self, screen, sock, key, ui_queue,players, username):
         self.ui_queue = ui_queue
         self.screen = screen
         self.sock = sock
         self.key = key
         self.players = dict(players)
+        for player,pid in self.players.items():
+            self.players[player] = pid + 1
+        last_player = next(reversed(self.players))
+        self.players[last_player] = 0
         self.username = username
+
+        self.game_start = False
+
+        self.cards = []
+
+
 
         self.host = False
 
@@ -36,7 +46,7 @@ class WaitingRoom:
              pygame.image.load(r'../Assets/Pictures/name2.png'),
             ]
 
-        self.player_slots = [(100,200),(300,20),(450,200),(300,300)]
+        self.player_slots = [(280,320),(100,200),(300,20),(450,200)]
 
         self.title = "Waiting Room"
 
@@ -72,7 +82,7 @@ class WaitingRoom:
             base_color="#d7fcd4",
             hovering_color="white",
             image=self.start_room_image,
-            text_pos=(45 * scale, 41 * scale)
+            text_pos=(100 * scale, 300 * scale)
 
         )
 
@@ -88,6 +98,50 @@ class WaitingRoom:
             name = get_font(30).render(username, True, (255, 255, 255))
             self.screen.blit(name, (pos_x * scale + 70, pos_y * scale + 15))
 
+
+    def build_cards(self):
+
+        if not self.cards:
+            return None
+
+        card_w = 33 * scale
+        card_h = 49 * scale
+        pad = 8
+
+        hand_x = 220 * scale
+        hand_y = 280 *scale
+        hand_w = 250 * scale
+        hand_h = 75 * scale
+
+        card_buttons = []
+
+
+        num_cards = len(self.cards)
+
+        if num_cards == 1:
+            spacing = 0
+        else:
+            spacing = (hand_w - card_w) / (num_cards - 1) + pad
+
+        for i,card in enumerate(self.cards):
+            x = hand_x + i * spacing
+            y = hand_y + (hand_h - card_h) / 2
+            surface = get_card(card)
+            if surface:
+                scaled_surface = pygame.transform.scale(surface, (int(card_w), int(card_h)))
+                btn = Button(
+                    pos=(x,y),
+                    text_input= "",
+                    font=get_font(30),
+                    base_color="#d7fcd4",
+                    hovering_color="white",
+                    image=scaled_surface,
+                    text_pos=(100 * scale, 300 * scale)
+                )
+                card_buttons.append(btn)
+        return card_buttons
+
+
     def handle_del(self,username):
         try:
             to_send = f"DEL|{username}"
@@ -99,6 +153,19 @@ class WaitingRoom:
 
         except Exception:
             MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
+
+    def handle_start(self):
+        try:
+            to_send = f"STR"
+            print("sending:", to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(self.sock, encrypted_to_send)
+        except Exception:
+            MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
+
+
 
     def run(self):
         pygame.display.set_caption(self.title)
@@ -112,7 +179,7 @@ class WaitingRoom:
             while self.ui_queue:
                 event = self.ui_queue[0]
                 print(event.get_where()  + " , " + str(type(event.get_where())))
-                if event.get_where() == "wait_room":
+                if event.get_where() == "play_room":
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
                         self.ui_queue.remove(event)
@@ -130,9 +197,14 @@ class WaitingRoom:
                             for name,pid in self.players.items():
                                 if name == del_player:
                                     self.players.pop(name)
+                                    break
                         self.ui_queue.remove(event)
-
-
+                    elif event.get_action() == "start":
+                        self.game_start = True
+                        self.ui_queue.remove(event)
+                    elif event.get_action() == "cards":
+                        self.cards = event.get_data()
+                        self.ui_queue.remove(event)
                     else:
                         self.ui_queue.remove(event)
                 else:
@@ -140,12 +212,22 @@ class WaitingRoom:
 
             self.screen.blit(self.background, (0, 0))
             self.draw_players()
-            self.screen.blit(self.crown, (165 * scale, 175 * scale))
+            if self.host:
+                self.screen.blit(self.crown, (380 * scale, 320 * scale))
+            else:
+                self.screen.blit(self.crown, (165 * scale, 175 * scale))
+
 
             buttons = self.build_button()
-            if self.host:
-                buttons.insert(0,self.build_start_button())
+            if not self.game_start:
+                if self.host:
+                    buttons.insert(0, self.build_start_button())
             for button in buttons:
+                button.changeColor(mouse_pos)
+                button.update(self.screen)
+
+            card_buttons = self.build_button()
+            for button in card_buttons:
                 button.changeColor(mouse_pos)
                 button.update(self.screen)
 
@@ -156,6 +238,10 @@ class WaitingRoom:
                     pygame.quit()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if not self.game_start:
+                        if self.host:
+                            if buttons[0].checkForInputs(mouse_pos):
+                                self.handle_start()
                     if buttons[-1].checkForInputs(mouse_pos):
 
                         self.handle_del(self.username)

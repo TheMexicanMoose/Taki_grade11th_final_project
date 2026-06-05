@@ -3,6 +3,7 @@ import sys
 import threading
 import pygame
 import os
+import ast
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -166,15 +167,29 @@ def listen_to_server(sock: socket.socket,screen):
 
             elif code == "NEW":
                 ui_request.append(UIChange(
-                    where="wait_room",
+                    where="play_room",
                     action="new_player",
                     data= {fields[1]: fields[2]}
                 ))
-            elif code == "DEL":
+            elif code == "DELP":
+                print("be gone")
                 ui_request.append(UIChange(
-                    where="wait_room",
+                    where="play_room",
                     action="del_player",
                     data= fields[1]
+                ))
+
+            elif code == "RSTR":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="start",
+                ))
+
+            elif code == "CARDS":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="cards",
+                    data= ast.literal_eval(fields[1])
                 ))
             elif code == "ERR":
                 pass
