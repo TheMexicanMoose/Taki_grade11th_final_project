@@ -27,6 +27,7 @@ class PlayingRoom:
 
         self.cards = []
 
+        self.is_turn = False
 
 
         self.host = False
@@ -46,7 +47,7 @@ class PlayingRoom:
              pygame.image.load(r'../Assets/Pictures/name2.png'),
             ]
 
-        self.player_slots = [(280,320),(100,200),(300,20),(450,200)]
+        self.player_slots = [(280,320),(25,150),(300,20),(450,200)]
 
         self.title = "Waiting Room"
 
@@ -55,6 +56,7 @@ class PlayingRoom:
 
         self.background = pygame.image.load(r'../Assets/Pictures/uno_background.jpg')
         self.crown = pygame.image.load(r'../Assets/Pictures/crown.png')
+        self.current_card = None
 
         self.run()
 
@@ -113,7 +115,7 @@ class PlayingRoom:
         hand_w = 250 * scale
         hand_h = 75 * scale
 
-        card_buttons = []
+        card_buttons = {}
 
 
         num_cards = len(self.cards)
@@ -128,17 +130,17 @@ class PlayingRoom:
             y = hand_y + (hand_h - card_h) / 2
             surface = get_card(card)
             if surface:
-                scaled_surface = pygame.transform.scale(surface, (int(card_w), int(card_h)))
+                img_surface = pygame.transform.scale(surface, (int(card_w), int(card_h)))
                 btn = Button(
                     pos=(x,y),
                     text_input= "",
                     font=get_font(30),
                     base_color="#d7fcd4",
                     hovering_color="white",
-                    image=scaled_surface,
+                    image=img_surface,
                     text_pos=(100 * scale, 300 * scale)
                 )
-                card_buttons.append(btn)
+                card_buttons[btn] = card
         return card_buttons
 
 
@@ -165,6 +167,19 @@ class PlayingRoom:
         except Exception:
             MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
 
+    def handle_play(self,card):
+        try:
+            to_send = f"PLAY|{card}"
+            print("sending:", to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(self.sock, encrypted_to_send)
+            self.cards.remove(card)
+
+        except Exception:
+            MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
+
 
 
     def run(self):
@@ -180,10 +195,13 @@ class PlayingRoom:
                 event = self.ui_queue[0]
                 print(event.get_where()  + " , " + str(type(event.get_where())))
                 if event.get_where() == "play_room":
+                    print("im_in")
                     if event.get_action() == "messagebox":
                         MassageBox(self.screen, event.get_title(), event.get_message())
                         self.ui_queue.remove(event)
+
                     elif event.get_action() == "new_player":
+                        print("new player")
                         new_player = event.get_data()
                         print(new_player)
                         if new_player:
@@ -191,6 +209,7 @@ class PlayingRoom:
                                 self.players[name] = int(pid)
                             print("current players:", self.players)
                         self.ui_queue.remove(event)
+
                     elif event.get_action() == "del_player":
                         del_player = event.get_data()
                         if del_player:
@@ -199,11 +218,26 @@ class PlayingRoom:
                                     self.players.pop(name)
                                     break
                         self.ui_queue.remove(event)
+
                     elif event.get_action() == "start":
                         self.game_start = True
                         self.ui_queue.remove(event)
+
                     elif event.get_action() == "cards":
                         self.cards = event.get_data()
+                        self.ui_queue.remove(event)
+
+                    elif event.get_action() == "curr_card":
+                        self.current_card = event.get_data()
+                        self.ui_queue.remove(event)
+
+                    elif event.get_action() == "stop":
+                        self.is_turn = False
+                        self.ui_queue.remove(event)
+
+                    elif event.get_action() == "turn":
+                        print("turn")
+                        self.is_turn = True
                         self.ui_queue.remove(event)
                     else:
                         self.ui_queue.remove(event)
@@ -215,7 +249,15 @@ class PlayingRoom:
             if self.host:
                 self.screen.blit(self.crown, (380 * scale, 320 * scale))
             else:
-                self.screen.blit(self.crown, (165 * scale, 175 * scale))
+                self.screen.blit(self.crown, (95 * scale, 125 * scale))
+
+            if self.current_card is not None:
+                card_w = 33 * scale
+                card_h = 49 * scale
+                surface = get_card(self.current_card)
+                img_surface = pygame.transform.scale(surface, (int(card_w), int(card_h)))
+
+                self.screen.blit(img_surface, (620, 250))
 
 
             buttons = self.build_button()
@@ -226,11 +268,12 @@ class PlayingRoom:
                 button.changeColor(mouse_pos)
                 button.update(self.screen)
 
-            card_buttons = self.build_button()
-            for button in card_buttons:
-                button.changeColor(mouse_pos)
-                button.update(self.screen)
-
+            if self.game_start:
+                card_buttons = self.build_cards()
+                if card_buttons is not None:
+                    for card in card_buttons.keys():
+                        card.changeColor(mouse_pos)
+                        card.update(self.screen)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -243,9 +286,14 @@ class PlayingRoom:
                             if buttons[0].checkForInputs(mouse_pos):
                                 self.handle_start()
                     if buttons[-1].checkForInputs(mouse_pos):
-
                         self.handle_del(self.username)
                         return
+                    if self.game_start:
+                        for button,card in card_buttons.items():
+                            if self.is_turn:
+                                if button.checkForInputs(mouse_pos):
+                                    self.handle_play(card)
+
 
 
             pygame.display.flip()

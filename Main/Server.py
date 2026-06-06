@@ -7,6 +7,7 @@ import queue
 import time
 import random as rnd
 import json
+import ast
 
 
 from Helpers.tcp_by_size import recv_by_size, send_with_size
@@ -151,6 +152,9 @@ class Room(threading.Thread):
         for p, inf in self.players.items():
             async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
         self.current_card = self.pile.pop(0)
+        for p, inf in self.players.items():
+            async_mgr.put_msg_by_user(f"CPLY|the new card is|{self.current_card}", p, inf["state"]["key"])
+        self.main()
 
     def player_count(self):
         with self.lock:
@@ -206,7 +210,8 @@ class Room(threading.Thread):
                         async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}",p, inf["state"]["key"])
 
                     async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
-                    card = self.play_queue.get()[1]
+                    print("hooo")
+                    card = ast.literal_eval(self.play_queue.get()[1][0])
 
                     if card[0] == self.current_card[0] or card[1] == self.current_card[1]:
                         info["cards"].remove(card)

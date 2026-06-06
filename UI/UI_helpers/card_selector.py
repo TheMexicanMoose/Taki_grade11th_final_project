@@ -62,13 +62,22 @@ cards = {
     ("WILD","CHANGE"): (5, 4)
 }
 
+plain_cards = {
+    ("RED", -1): (0,0),
+    ("GREEN", -1): (0,1),
+    ("YELLOW", -1): (0,2),
+    ("BLUE", -1): (0,3),
+}
+
 def get_card(card):
     pic = pygame.image.load(r'../Assets/Pictures/uno_cards.jpg')
     row,col = 0,0
     if card in cards.keys():
         row,col = cards[card]
     else:
-        return None
+        if card in plain_cards.keys():
+            pic = pygame.image.load(r'../Assets/Pictures/plain_cards.jpg')
+            row,col = plain_cards[card]
 
     x_pos = col * 33
     y_pos = row * 50

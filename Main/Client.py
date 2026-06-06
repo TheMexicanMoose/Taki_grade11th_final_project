@@ -191,6 +191,26 @@ def listen_to_server(sock: socket.socket,screen):
                     action="cards",
                     data= ast.literal_eval(fields[1])
                 ))
+            elif code == "CPLY":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="curr_card",
+                    data= ast.literal_eval(fields[2])
+                ))
+
+
+            elif code == "STOP":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="stop"
+                ))
+
+            elif code == "TURN":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="turn"
+                ))
+
             elif code == "ERR":
                 pass
 
