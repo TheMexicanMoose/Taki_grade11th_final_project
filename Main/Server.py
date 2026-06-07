@@ -209,9 +209,24 @@ class Room(threading.Thread):
                     for p,inf in self.players.items():
                         async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}",p, inf["state"]["key"])
 
+                    for p, inf in self.players.items():
+                        counts = {}
+                        for player_name, player_info in self.players.items():
+                            counts[player_name] = len(player_info["cards"])
+
+                        async_mgr.put_msg_by_user(
+                            f"PCOUNT|{counts}",p,inf["state"]["key"]
+                        )
+
                     async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
                     print("hooo")
-                    card = ast.literal_eval(self.play_queue.get()[1][0])
+                    action = self.play_queue.get()
+
+                    if action == "ADD":
+                        info["cards"].append(self.pile.pop(0))
+                        continue
+
+                    card = ast.literal_eval(action[1][0])
 
                     if card[0] == self.current_card[0] or card[1] == self.current_card[1]:
                         info["cards"].remove(card)
@@ -309,6 +324,9 @@ class Room(threading.Thread):
             self.play_queue.put(("PLAY",fields[1:]))
         elif request_code == "CHCO":
             self.play_queue.put(("CHCO",fields[1:]))
+        elif request_code == "ADD":
+            self.play_queue.put("ADD")
+
 
         return None
 

@@ -27,6 +27,8 @@ class PlayingRoom:
 
         self.cards = []
 
+        self.card_count = {}
+
         self.is_turn = False
 
 
@@ -46,8 +48,12 @@ class PlayingRoom:
              pygame.image.load(r'../Assets/Pictures/name3.png'),
              pygame.image.load(r'../Assets/Pictures/name2.png'),
             ]
+        self.card_img = pygame.image.load(r'../Assets/Pictures/uno_card.png')
+        self.card_norm_img = pygame.transform.scale(self.card_img, (self.card_img.get_width() * scale, self.card_img.get_height() * scale))
 
         self.player_slots = [(280,320),(25,150),(300,20),(450,200)]
+
+        self.player_cards = [(50,50),(150,45),(425,20)]
 
         self.title = "Waiting Room"
 
@@ -90,6 +96,19 @@ class PlayingRoom:
 
         return  start_button
 
+    def build_add_card(self):
+        get_card_button = Button(
+            pos=(750, 270),
+            text_input="",
+            font=get_font(30),
+            base_color="#d7fcd4",
+            hovering_color="white",
+            image=self.card_norm_img,
+            text_pos=(150 * scale, 300 * scale)
+        )
+
+        return [get_card_button]
+
     def draw_players(self):
         for username, player_id in self.players.items():
             pos_x ,pos_y = self.player_slots[player_id]
@@ -99,6 +118,49 @@ class PlayingRoom:
 
             name = get_font(30).render(username, True, (255, 255, 255))
             self.screen.blit(name, (pos_x * scale + 70, pos_y * scale + 15))
+
+
+    def draw_player_cards(self):
+        for i,(player,pid) in enumerate(self.players.items()):
+            if pid == 0:
+                continue
+
+            count = 0
+
+            card_w = 33
+            card_h = 49
+            pad = 8
+
+            orientation = pid *90
+            img = pygame.transform.rotate(self.card_img,orientation)
+            hand_x = self.player_cards[pid][0] * scale
+            hand_y = self.player_cards[pid][1] * scale
+            hand_w = 250
+            hand_h = 75
+
+            for name in self.card_count.keys():
+                if player == name:
+                    count = self.card_count[name]
+
+
+            if count == 1:
+                spacing = 0
+            else:
+                if pid % 2 == 0:
+                    spacing = (hand_w - card_w) / (count - 1) + pad
+                else:
+                    spacing = (hand_h - card_h) / (count - 1) + pad
+
+            for j in range(1,count+1):
+             if pid % 2 == 0:
+                 x = hand_x + j * spacing
+                 y = hand_y + (hand_h - card_h) / 2
+                 self.screen.blit(img, (x, y))
+             else:
+                y = hand_y + j * spacing
+                x = hand_x + (hand_h - card_h) / 2
+                self.screen.blit(img, (x, y))
+
 
 
     def build_cards(self):
@@ -159,6 +221,17 @@ class PlayingRoom:
     def handle_start(self):
         try:
             to_send = f"STR"
+            print("sending:", to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(self.sock, encrypted_to_send)
+        except Exception:
+            MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
+
+    def handle_add(self):
+        try:
+            to_send = f"ADD"
             print("sending:", to_send)
             to_send = to_send.encode('utf-8')
             to_send = pad_massage(to_send)
@@ -239,6 +312,10 @@ class PlayingRoom:
                         print("turn")
                         self.is_turn = True
                         self.ui_queue.remove(event)
+
+                    elif event.get_action() == "count":
+                        self.card_count = event.get_data()
+                        self.ui_queue.remove(event)
                     else:
                         self.ui_queue.remove(event)
                 else:
@@ -259,6 +336,8 @@ class PlayingRoom:
 
                 self.screen.blit(img_surface, (620, 250))
 
+                self.draw_player_cards()
+
 
             buttons = self.build_button()
             if not self.game_start:
@@ -275,6 +354,12 @@ class PlayingRoom:
                         card.changeColor(mouse_pos)
                         card.update(self.screen)
 
+                card_pile = self.build_add_card()
+                if card_pile is not None:
+                    for card in card_pile:
+                        card.changeColor(mouse_pos)
+                        card.update(self.screen)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.handle_del(self.username)
@@ -288,11 +373,13 @@ class PlayingRoom:
                     if buttons[-1].checkForInputs(mouse_pos):
                         self.handle_del(self.username)
                         return
-                    if self.game_start:
-                        for button,card in card_buttons.items():
-                            if self.is_turn:
-                                if button.checkForInputs(mouse_pos):
-                                    self.handle_play(card)
+                    if self.game_start and self.is_turn:
+                        for button, card in card_buttons.items():
+                            if button.checkForInputs(mouse_pos):
+                                self.handle_play(card)
+
+                        if card_pile[0].checkForInputs(mouse_pos):
+                            self.handle_add()
 
 
 

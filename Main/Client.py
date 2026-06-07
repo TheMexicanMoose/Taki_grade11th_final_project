@@ -211,6 +211,12 @@ def listen_to_server(sock: socket.socket,screen):
                     action="turn"
                 ))
 
+            elif code == "PCOUNT":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="count",
+                    data=ast.literal_eval(fields[1])
+                ))
             elif code == "ERR":
                 pass
 
