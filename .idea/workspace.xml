@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Pictures/uno_card.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Taki_grade11th_final_project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Taki_grade11th_final_project.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -63,6 +62,7 @@
     "Python.Email_new_pass.executor": "Run",
     "Python.Login-Sign-Up-Dropdown.executor": "Run",
     "Python.Login.executor": "Run",
+    "Python.Login_Sign_Up_Dropdown.executor": "Run",
     "Python.Main_manu.executor": "Run",
     "Python.Main_menu.executor": "Run",
     "Python.Playing_room.executor": "Run",

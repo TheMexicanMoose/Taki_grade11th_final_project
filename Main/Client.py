@@ -217,6 +217,26 @@ def listen_to_server(sock: socket.socket,screen):
                     action="count",
                     data=ast.literal_eval(fields[1])
                 ))
+
+            elif code == "CHANGE":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="change",
+                ))
+            elif code == "NOP":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="messagebox",
+                    title="Error",
+                    message="Not enough \n player"
+                ))
+
+            elif code == "WIN":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="win",
+                    data= fields[1]
+                ))
             elif code == "ERR":
                 pass
 

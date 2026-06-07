@@ -1,3 +1,5 @@
+import time
+
 import pygame
 
 from Helpers.tcp_by_size import send_with_size
@@ -33,6 +35,7 @@ class PlayingRoom:
 
 
         self.host = False
+        self.change = False
 
         print("hello")
 
@@ -118,6 +121,57 @@ class PlayingRoom:
 
             name = get_font(30).render(username, True, (255, 255, 255))
             self.screen.blit(name, (pos_x * scale + 70, pos_y * scale + 15))
+
+    def build_color_buttons(self):
+        red_img = pygame.Surface((100, 100))
+        red_img.fill((255, 0, 0))
+
+        blue_img = pygame.Surface((100, 100))
+        blue_img.fill((0, 0, 255))
+
+        green_img = pygame.Surface((100, 100))
+        green_img.fill((0, 255, 0))
+
+        yellow_img = pygame.Surface((100, 100))
+        yellow_img.fill((255, 255, 0))
+
+        red_button = Button(
+            pos=(250, 300),
+            text_input="",
+            font=get_font(30),
+            base_color="white",
+            hovering_color="white",
+            image=red_img
+        )
+
+        blue_button = Button(
+            pos=(400, 300),
+            text_input="",
+            font=get_font(30),
+            base_color="white",
+            hovering_color="white",
+            image=blue_img
+        )
+
+        green_button = Button(
+            pos=(250, 450),
+            text_input="",
+            font=get_font(30),
+            base_color="white",
+            hovering_color="white",
+            image=green_img
+        )
+
+        yellow_button = Button(
+            pos=(400, 450),
+            text_input="",
+            font=get_font(30),
+            base_color="white",
+            hovering_color="white",
+            image=yellow_img
+        )
+
+        return [red_button,blue_button,green_button,yellow_button]
 
 
     def draw_player_cards(self):
@@ -253,6 +307,19 @@ class PlayingRoom:
         except Exception:
             MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
 
+    def handle_change(self,color):
+        try:
+            to_send = f"CHAN|{color}"
+            print("sending:", to_send)
+            to_send = to_send.encode('utf-8')
+            to_send = pad_massage(to_send)
+            encrypted_to_send = encrypt(to_send, self.key)
+            send_with_size(self.sock, encrypted_to_send)
+
+        except Exception:
+            MassageBox(self.screen, "ERROR", "an unexpected \n error occurred!")
+
+
 
 
     def run(self):
@@ -316,6 +383,21 @@ class PlayingRoom:
                     elif event.get_action() == "count":
                         self.card_count = event.get_data()
                         self.ui_queue.remove(event)
+
+                    elif event.get_action() == "change":
+                        self.change = True
+                        self.ui_queue.remove(event)
+
+                    elif event.get_action() == "win":
+                        win_text = get_font(300).render(f'{event.get_data()} WON!!', True, "yellow")
+                        win_rect = win_text.get_rect(center=(320 * scale, 150 * scale))
+                        self.screen.blit(win_text, win_rect)
+
+                        time.sleep(2)
+
+                        self.game_start = False
+                        self.ui_queue.remove(event)
+
                     else:
                         self.ui_queue.remove(event)
                 else:
@@ -360,6 +442,12 @@ class PlayingRoom:
                         card.changeColor(mouse_pos)
                         card.update(self.screen)
 
+                if self.change:
+                    color_buttons = self.build_color_buttons()
+                    for color_button in color_buttons:
+                        color_button.changeColor(mouse_pos)
+                        color_button.update(self.screen)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.handle_del(self.username)
@@ -373,13 +461,28 @@ class PlayingRoom:
                     if buttons[-1].checkForInputs(mouse_pos):
                         self.handle_del(self.username)
                         return
-                    if self.game_start and self.is_turn:
+                    if self.game_start and self.is_turn and not self.change:
                         for button, card in card_buttons.items():
                             if button.checkForInputs(mouse_pos):
                                 self.handle_play(card)
 
                         if card_pile[0].checkForInputs(mouse_pos):
                             self.handle_add()
+
+                    if self.game_start and self.is_turn and self.change:
+                        if color_buttons[0].checkForInputs(mouse_pos):
+                            self.handle_change("red")
+                            self.change = False
+                        elif color_buttons[1].checkForInputs(mouse_pos):
+                            self.handle_change("blue")
+                            self.change = False
+                        elif color_buttons[2].checkForInputs(mouse_pos):
+                            self.handle_change("green")
+                            self.change = False
+                        elif color_buttons[3].checkForInputs(mouse_pos):
+                            self.handle_change("yellow")
+                            self.change = False
+
 
 
 

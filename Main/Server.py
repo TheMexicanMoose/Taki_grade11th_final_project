@@ -9,6 +9,7 @@ import random as rnd
 import json
 import ast
 
+from sympy import false
 
 from Helpers.tcp_by_size import recv_by_size, send_with_size
 from Helpers.Async import Async
@@ -98,10 +99,13 @@ class Room(threading.Thread):
         self.reverse_player = ""
 
         self.pile = []
-        colors = ["RED", "GREEN", "BLUE","YELLOW"]
+        self.create_pile()
+
+    def create_pile(self):
+        colors = ["RED", "GREEN", "BLUE", "YELLOW"]
         for color in colors:
 
-            for i in range(1,10):
+            for i in range(1, 10):
                 self.pile.append((color, i))
                 self.pile.append((color, i))
 
@@ -109,9 +113,9 @@ class Room(threading.Thread):
                 self.pile.append((color, action))
                 self.pile.append((color, action))
 
-        for i in range (4):
-            self.pile.append(('WILD','CHANGE'))
-            self.pile.append(('WILD','DRAW_FOUR'))
+        for i in range(4):
+            self.pile.append(('WILD', 'CHANGE'))
+            self.pile.append(('WILD', 'DRAW_FOUR'))
 
     def add_player(self, username,sock,state):
         with self.lock:
@@ -127,12 +131,18 @@ class Room(threading.Thread):
             return 'successfully joined'
 
     def del_player(self, username,state):
+        is_host = false
         with self.lock:
             if username in self.players:
+                is_host = self.players[username].get("is_host", False)
                 del self.players[username]
+
 
         with lock:
             state["room"] = None
+
+        if is_host:
+            self.clear_room()
 
         if self.is_empty():
             with lock:
@@ -140,21 +150,38 @@ class Room(threading.Thread):
                 if self in rooms:
                     rooms.remove(self)
 
+    def clear_room(self):
+        with self.lock:
+            for player,info in self.players.items():
+                del self.players[player]
+
+                with lock:
+                    info["state"]["room"] = None
+
     def is_empty(self):
         with self.lock:
             return len(self.players) <= 0
 
     def start_game(self):
-        rnd.shuffle(self.pile)
-        for i in range(8):
-            for player in self.players.values():
-                player["cards"].append(self.pile.pop(0))
-        for p, inf in self.players.items():
-            async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
-        self.current_card = self.pile.pop(0)
-        for p, inf in self.players.items():
-            async_mgr.put_msg_by_user(f"CPLY|the new card is|{self.current_card}", p, inf["state"]["key"])
-        self.main()
+        if self.player_count() <= 1:
+            player, data = next(iter(self.players.items()))
+            async_mgr.put_msg_by_user( "NOP",[player],data["state"]["key"])
+        else:
+            rnd.shuffle(self.pile)
+            for i in range(8):
+                for player in self.players.values():
+                    player["cards"].append(self.pile.pop(0))
+            for p, inf in self.players.items():
+                async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
+            while True:
+                self.current_card = self.pile.pop(0)
+                if self.current_card[0] != "WILD" and self.current_card[1] != "REVERSE" and self.current_card[1] != "DRAW_TWO" and self.current_card[1] != "SKIP":
+                    break
+                self.pile.append(self.current_card)
+
+            for p, inf in self.players.items():
+                async_mgr.put_msg_by_user(f"CPLY|the new card is|{self.current_card}", p, inf["state"]["key"])
+            self.main()
 
     def player_count(self):
         with self.lock:
@@ -168,8 +195,17 @@ class Room(threading.Thread):
         players_list = list(self.players.items())
 
         while playing:
+            if len(self.pile) == 0:
+                with self.lock:
+                    self.create_pile()
+                    self.pile.remove(self.current_card)
+                    for player, info in players_list:
+                        for card in info["cards"]:
+                            self.pile.remove(card)
+
             if self.reverse:
-                players_list.reverse()
+                with self.lock:
+                    players_list.reverse()
                 self.reverse = False
 
             for i, (player, info) in enumerate(players_list):
@@ -184,22 +220,27 @@ class Room(threading.Thread):
                 elif self.two_next:
                     if any(c[1] == "DRAW_TWO" for c in info["cards"]):
                         async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
-                        card = self.play_queue.get()[1]
+                        card = ast.literal_eval(self.play_queue.get()[1][0])
                         if card[1] == 'DRAW_TWO':
-                            info["cards"].remove(card)
+                            with self.lock:
+                                info["cards"].remove(card)
                             self.number += 1
                             self.two_next = True
                         else:
                             async_mgr.put_msg_by_user("CANT", player, info["state"]["key"])
                     else:
+                        print(info["cards"])
                         for _ in range(2 * self.number):
-                            info["cards"].append(self.pile.pop(0))
+                            with self.lock:
+                                info["cards"].append(self.pile.pop(0))
+                        print(info["cards"])
                         self.number = 1
                         self.two_next = False
 
                 elif self.draw_four:
                     for _ in range(4):
-                        info["cards"].append(self.pile.pop(0))
+                        with self.lock:
+                            info["cards"].append(self.pile.pop(0))
                     self.draw_four = False
 
                 else:
@@ -229,7 +270,8 @@ class Room(threading.Thread):
                     card = ast.literal_eval(action[1][0])
 
                     if card[0] == self.current_card[0] or card[1] == self.current_card[1]:
-                        info["cards"].remove(card)
+                        with self.lock:
+                            info["cards"].remove(card)
                         for p, inf in self.players.items():
                             async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
 
@@ -276,7 +318,7 @@ class Room(threading.Thread):
 
                         if card[1] == 'CHANGE':
                             async_mgr.put_msg_by_user("CHANGE", player, info["state"]["key"])
-                            color = self.play_queue.get()[1]
+                            color = self.play_queue.get()[0]
                             color_map = {
                                 "yellow": ("YELLOW", -1),
                                 "red": ("RED", -1),
@@ -287,7 +329,7 @@ class Room(threading.Thread):
 
                         elif card[1] == 'DRAW_FOUR':
                             async_mgr.put_msg_by_user("CHANGE", player, info["state"]["key"])
-                            color = self.play_queue.get()[1]
+                            color = self.play_queue.get()[0]
                             color_map = {
                                 "yellow": ("YELLOW", -1),
                                 "red": ("RED", -1),
@@ -322,11 +364,15 @@ class Room(threading.Thread):
             self.start_game()
         elif request_code == "PLAY":
             self.play_queue.put(("PLAY",fields[1:]))
+
         elif request_code == "CHCO":
             self.play_queue.put(("CHCO",fields[1:]))
+
         elif request_code == "ADD":
             self.play_queue.put("ADD")
 
+        elif request_code == "CHAN":
+            self.play_queue.put(fields[:1])
 
         return None
 
