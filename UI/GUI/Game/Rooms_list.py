@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import pygame
 
 from Helpers.tcp_by_size import send_with_size

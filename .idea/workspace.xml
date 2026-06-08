@@ -5,10 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Encryption/RSA.py" beforeDir="false" afterPath="$PROJECT_DIR$/Encryption/RSA.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/Async.py" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/Async.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/DataBase.py" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/DataBase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/UIChange.py" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/UIChange.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/send_mail.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main/Client.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Main_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Options.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Options.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Playing_room.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Playing_room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Rooms_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Rooms_list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Email_new_pass.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Email_new_pass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Login.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Login_Sign_Up_Dropdown.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Login_Sign_Up_Dropdown.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Register_New_Pass.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Register_New_Pass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/Verify_code.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/Verify_code.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Registration/sign_up.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Registration/sign_up.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/Button.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/Button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/Text_Input.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/Text_Input.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/card_selector.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/card_selector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/gif_load.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/gif_load.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/massagebox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/globals.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

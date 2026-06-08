@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import pygame
 from UI.UI_helpers.Button import Button
 from UI.GUI.Registration.Login import Login

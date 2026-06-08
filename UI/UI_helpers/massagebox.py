@@ -1,3 +1,4 @@
+__author__ = "Noam"
 
 import pygame
 from globals import *

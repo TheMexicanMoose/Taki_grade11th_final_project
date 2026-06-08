@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import pygame
 
 from UI.GUI.Registration.Register_New_Pass import RegisterNewPass
@@ -16,7 +18,6 @@ def get_font(size):
 def get_arial_font(size):
     return pygame.font.SysFont("Arial", size)
 
-#the login page
 class VerifyCode:
     def __init__(self, screen, background,sock,key,ui_queue):
         self.ui_queue = ui_queue
@@ -25,12 +26,10 @@ class VerifyCode:
         self.sock = sock
         self.key = key
 
-        #load the login box
         self.box = pygame.image.load(r'..\Assets\Pictures\box.PNG')
         self.box_rect = self.box.get_rect()
         self.box_rect.center = (320 * scale, 190 * scale)
 
-        #fills the background with transparent black
         self.overlay = pygame.Surface((SIZE_WIDTH * scale, SIZE_HEIGHT * scale), pygame.SRCALPHA)
         self.overlay.fill((0, 0, 0, 180))
         self.title = "get code"
@@ -39,9 +38,7 @@ class VerifyCode:
         self.input_box = pygame.transform.scale(self.input_box, (250, 81))
 
 
-        #the user's inputs
         self.code = ""
-        #in what box the user in
         self.code_active = False
 
 
@@ -90,7 +87,6 @@ class VerifyCode:
 
         return [code_button, exit_button]
 
-    #handle what to send to the server to log in
     def handel_Code_Verification(self, code, sock):
         try:
             to_send = f"GRP|{code}"

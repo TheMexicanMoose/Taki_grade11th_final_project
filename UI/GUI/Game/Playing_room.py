@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import time
 
 import pygame

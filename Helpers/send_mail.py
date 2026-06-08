@@ -1,4 +1,4 @@
-
+__author__ = "Noam"
 
 import smtplib
 import ssl

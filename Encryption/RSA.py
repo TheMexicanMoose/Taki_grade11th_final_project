@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import os
 
 from cryptography.hazmat.primitives.asymmetric import rsa, padding

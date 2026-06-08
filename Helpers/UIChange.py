@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 class UIChange:
     def __init__(self, where, action,new="", title="", message="", data = None):
         self.where = where

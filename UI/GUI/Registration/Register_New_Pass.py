@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import pygame
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.Text_Input import TextInput
@@ -14,7 +16,6 @@ def get_font(size):
 def get_arial_font(size):
     return pygame.font.SysFont("Arial", size)
 
-#the login page
 class RegisterNewPass:
     def __init__(self, screen, background,sock,key,ui_queue,email):
         self.ui_queue = ui_queue
@@ -24,7 +25,6 @@ class RegisterNewPass:
         self.key = key
         self.email = email
 
-        #load the login box
         self.box = pygame.image.load(r'..\Assets\Pictures\box.PNG')
         self.box_rect = self.box.get_rect()
         self.box_rect.center = (320 * scale, 190 * scale)
@@ -38,9 +38,7 @@ class RegisterNewPass:
         self.input_box = pygame.transform.scale(self.input_box, (250, 81))
 
 
-        #the user's inputs
         self.newpass = ""
-        #in what box the user in
         self.newpass_active = False
 
 
@@ -88,7 +86,6 @@ class RegisterNewPass:
 
         return [newpass_button, exit_button]
 
-    #handle what to send to the server to log in
     def handel_New_Password(self, password, sock):
         try:
             to_send = f"RNP|{password}|{self.email}"

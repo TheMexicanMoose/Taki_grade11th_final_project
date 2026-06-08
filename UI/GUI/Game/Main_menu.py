@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import pygame
 import random
 import os

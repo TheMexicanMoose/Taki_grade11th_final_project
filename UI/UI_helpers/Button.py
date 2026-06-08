@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 class Button:
     def __init__(self,pos,text_input,font,base_color,hovering_color,image = None,text_pos = None):
         self.image = image

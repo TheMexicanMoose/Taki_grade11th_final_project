@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import threading
 import pickle
 from Encryption.AES import *

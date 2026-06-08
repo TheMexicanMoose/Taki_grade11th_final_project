@@ -1,3 +1,5 @@
+__author__ = "Noam"
+
 import socket
 import sys
 import threading
