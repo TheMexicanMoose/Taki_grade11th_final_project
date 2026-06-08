@@ -99,19 +99,21 @@ class Options:
             self.screen.blit(username_text, username_rect)
 
             credits_lines = [
-                "GAME CREATOR",
+                "GAME CREATOR:",
                 "  noam gilboa",
                 "",
-                "MUSIC",
+                "MUSIC:",
                 "  randow wii music",
                 "",
-                "ASSETS",
+                "ASSETS:",
                 "  unity assets store",
+                "  random assets from the internet"
                 "",
-                "CODE",
+                "",
+                "CODE:",
                 "  noam gilboa",
                 "",
-                "EVERYTHING",
+                "EVERYTHING:",
                 "  noam gilboa",
                 "",
                 "THANKS FOR PLAYING!!"

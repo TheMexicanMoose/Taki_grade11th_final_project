@@ -168,6 +168,8 @@ class Room(threading.Thread):
             player, data = next(iter(self.players.items()))
             async_mgr.put_msg_by_user( "NOP",[player],data["state"]["key"])
         else:
+            for p,inf in self.players.items():
+                async_mgr.put_msg_by_user(f"RSTR|the game has started",p, inf["state"]["key"])
             rnd.shuffle(self.pile)
             for i in range(8):
                 for player in self.players.values():
@@ -373,8 +375,6 @@ class Room(threading.Thread):
                 print("blob")
                 async_mgr.put_msg_by_user(f"DELP|{fields[1]}",p, inf["state"]["key"])
         if request_code == "STR":
-            for p,inf in self.players.items():
-                async_mgr.put_msg_by_user(f"RSTR|the game has started",p, inf["state"]["key"])
             self.start_game()
         elif request_code == "PLAY":
             self.play_queue.put(("PLAY",fields[1:]))
@@ -487,35 +487,6 @@ class HandleData:
                     username = value["username"]
             new_password(username, fields_in_data[1])
             return self.encrypt_response("RRMP|reset password")
-
-        elif request_code == "PUB":
-            if self.sock not in async_mgr.user_by_sock:
-                return self.encrypt_response("ERR|Not logged in")
-
-            async_mgr.put_msg_to_all(f'MSG|{fields_in_data[1]}|{fields_in_data[2]}', state['key'])
-            to_ret = "REP"
-
-        elif request_code == "OUT":
-            if fields_in_data[1] in log_in_users:
-                with lock:
-                    log_in_users.remove(fields_in_data[1])
-
-            async_mgr.put_msg_to_all(f'OMSG|{fields_in_data[1]} has left the chat', state['key'])
-            to_ret = "REP"
-
-        elif request_code == "PRV":
-            if self.sock not in async_mgr.user_by_sock:
-                return self.encrypt_response("ERR|Not logged in")
-
-            if fields_in_data[2] not in async_mgr.users:
-                return self.encrypt_response("ERR|User does not exist")
-
-            if fields_in_data[2] not in async_mgr.sock_by_user:
-                return self.encrypt_response("ERR|User is not online")
-
-            async_mgr.put_msg_by_user(f"PMSG|{fields_in_data[1]}|{fields_in_data[3]}",
-                                      fields_in_data[2], state['key'])
-            to_ret = "REP"
 
         elif request_code == "CRR":
             if self.sock not in async_mgr.user_by_sock:

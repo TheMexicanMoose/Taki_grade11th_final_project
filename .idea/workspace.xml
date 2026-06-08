@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e5f5dce-56dc-4a03-a225-a31f4f3d9783" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/UI/GUI/Game/Options.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/Client.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Client.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/Server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Main_menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Playing_room.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Playing_room.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UI_helpers/card_selector.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI_helpers/card_selector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/globals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/users.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GUI/Game/Options.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GUI/Game/Options.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,34 +51,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Button.executor": "Run",
-    "Python.Client.executor": "Run",
-    "Python.DataBase.executor": "Run",
-    "Python.Email_new_pass.executor": "Run",
-    "Python.Login-Sign-Up-Dropdown.executor": "Run",
-    "Python.Login.executor": "Run",
-    "Python.Login_Sign_Up_Dropdown.executor": "Run",
-    "Python.Main_manu.executor": "Run",
-    "Python.Main_menu.executor": "Run",
-    "Python.Options.executor": "Run",
-    "Python.Playing_room.executor": "Run",
-    "Python.Rooms_list.executor": "Run",
-    "Python.Server.executor": "Run",
-    "Python.Text_Input.executor": "Run",
-    "Python.Waiting_room.executor": "Run",
-    "Python.sign_up.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Owner/GitHub/Taki_grade11th_final_project/Assets/Pictures"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Button.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Client.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DataBase.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Email_new_pass.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login-Sign-Up-Dropdown.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login_Sign_Up_Dropdown.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_manu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Options.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Playing_room.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Rooms_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Text_Input.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Waiting_room.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sign_up.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Owner/GitHub/Taki_grade11th_final_project/Assets/Pictures&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Owner\GitHub\Taki_grade11th_final_project\Assets\Pictures" />
@@ -150,7 +145,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main/Server.py</url>
-          <line>607</line>
+          <line>578</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
