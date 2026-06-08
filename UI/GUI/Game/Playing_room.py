@@ -388,10 +388,19 @@ class PlayingRoom:
                         self.change = True
                         self.ui_queue.remove(event)
 
+                    elif event.get_action() == "uno":
+                        uno_text = get_font(300).render(f'{event.get_data()} UNO!!', True, "yellow")
+                        uno_rect = uno_text.get_rect(center=(320 * scale, 150 * scale))
+                        self.screen.blit(uno_text, uno_rect)
+                        pygame.display.flip()
+
+                        time.sleep(1)
+
                     elif event.get_action() == "win":
                         win_text = get_font(300).render(f'{event.get_data()} WON!!', True, "yellow")
                         win_rect = win_text.get_rect(center=(320 * scale, 150 * scale))
                         self.screen.blit(win_text, win_rect)
+                        pygame.display.flip()
 
                         time.sleep(2)
 
@@ -410,7 +419,7 @@ class PlayingRoom:
             else:
                 self.screen.blit(self.crown, (95 * scale, 125 * scale))
 
-            if self.current_card is not None:
+            if self.current_card is not None and self.game_start:
                 card_w = 33 * scale
                 card_h = 49 * scale
                 surface = get_card(self.current_card)

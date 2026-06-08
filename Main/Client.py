@@ -231,6 +231,13 @@ def listen_to_server(sock: socket.socket,screen):
                     message="Not enough \n player"
                 ))
 
+            elif code == "UNO":
+                ui_request.append(UIChange(
+                    where="play_room",
+                    action="uno",
+                    data=fields[1]
+                ))
+
             elif code == "WIN":
                 ui_request.append(UIChange(
                     where="play_room",

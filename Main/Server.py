@@ -35,17 +35,18 @@ log_in_users = []
 
 socket_state = {}
 lock = threading.Lock()
+state_lock = threading.Lock()
 
 
 def get_state(sock):
-    with lock:
+    with state_lock:
         if sock not in socket_state:
             socket_state[sock] = {'key': b'', 'has_key': False, "room":None}
         return socket_state[sock]
 
 
 def delete_state(sock):
-    with lock:
+    with state_lock:
         socket_state.pop(sock, None)
 
 
@@ -192,9 +193,9 @@ class Room(threading.Thread):
 
     def main(self):
         playing = True
-        players_list = list(self.players.items())
 
         while playing:
+            players_list = list(self.players.items())
             if len(self.pile) == 0:
                 with self.lock:
                     self.create_pile()
@@ -275,9 +276,13 @@ class Room(threading.Thread):
                         for p, inf in self.players.items():
                             async_mgr.put_msg_by_user(f"CARDS|{inf["cards"]}", p, inf["state"]["key"])
 
+                        if len(info["cards"]) == 1:
+                            for p, inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"UNO|{player}", p, inf["state"]["key"])
+
                         if len(info["cards"]) == 0:
                             for p,inf in self.players.items():
-                                async_mgr.put_msg_by_user(f"WIN|{p}",p, inf["state"]["key"])
+                                async_mgr.put_msg_by_user(f"WIN|{player}",p, inf["state"]["key"])
                             playing = False
                             break
 
@@ -319,6 +324,7 @@ class Room(threading.Thread):
                         if card[1] == 'CHANGE':
                             async_mgr.put_msg_by_user("CHANGE", player, info["state"]["key"])
                             color = self.play_queue.get()[0]
+                            print(color)
                             color_map = {
                                 "yellow": ("YELLOW", -1),
                                 "red": ("RED", -1),
@@ -326,10 +332,14 @@ class Room(threading.Thread):
                                 "green": ("GREEN", -1),
                             }
                             self.current_card = color_map.get(color, self.current_card)
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"CPLY|the new card is|{self.current_card}",p, inf["state"]["key"])
+                            print(self.current_card)
 
                         elif card[1] == 'DRAW_FOUR':
                             async_mgr.put_msg_by_user("CHANGE", player, info["state"]["key"])
                             color = self.play_queue.get()[0]
+                            print(color)
                             color_map = {
                                 "yellow": ("YELLOW", -1),
                                 "red": ("RED", -1),
@@ -337,6 +347,9 @@ class Room(threading.Thread):
                                 "green": ("GREEN", -1),
                             }
                             self.current_card = color_map.get(color, self.current_card)
+                            for p,inf in self.players.items():
+                                async_mgr.put_msg_by_user(f"CPLY|the new card is|{self.current_card}",p, inf["state"]["key"])
+                            print(self.current_card)
                             self.draw_four = True
 
 
@@ -348,6 +361,7 @@ class Room(threading.Thread):
 
                     else:
                         async_mgr.put_msg_by_user("CANT", player, info["state"]["key"])
+                        players_list.insert(i + 1, (player, info))
 
 
 
@@ -372,7 +386,7 @@ class Room(threading.Thread):
             self.play_queue.put("ADD")
 
         elif request_code == "CHAN":
-            self.play_queue.put(fields[:1])
+            self.play_queue.put(fields[1:])
 
         return None
 
@@ -583,12 +597,14 @@ class ClientHandler(threading.Thread):
 
             except socket.error as sock_err:
                 print(f"Socket error: {sock_err}")
-                break
+                self.finish = True
             except Exception as e:
                 print(f"Exception: {e}")
-                break
+                self.finish = True
 
+        print("jj")
         with lock:
+            print("kk")
             async_mgr.delete_socket(self.sock)
             delete_state(self.sock)
             print(f"Closing sock {self.cid}")

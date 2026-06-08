@@ -7,6 +7,7 @@ from UI.UI_helpers.gif_load import load_gif
 from UI.UI_helpers.Button import Button
 from UI.UI_helpers.massagebox import MassageBox
 from UI.GUI.Registration.Login_Sign_Up_Dropdown import DropDown
+from UI.GUI.Game.Options import Options
 from globals import *
 
 pygame.init()
@@ -94,6 +95,7 @@ class MainMenu:
         while True:
             pygame.display.set_caption('Main Menu')
 
+
             dt = self.clock.tick(60)
             self.elapsed += dt
             self.animal_elapsed += dt
@@ -139,6 +141,8 @@ class MainMenu:
                             RoomsList(self.screen, self.sock, self.key, self.ui_queue,self.username)
                         else:
                             MassageBox(self.screen,"Error","pls sigh in \n to play")
+                    elif self.build_buttons()[1].checkForInputs(mouse_pos):
+                        Options(self.screen, self.sock, self.key, self.ui_queue)
                     elif self.build_buttons()[2].checkForInputs(mouse_pos):
                         pygame.quit()
                     elif self.build_buttons()[3].checkForInputs(mouse_pos):
@@ -152,7 +156,7 @@ class MainMenu:
                                 self.username = result
                                 self.is_logged_in = True
                                 print("logged in")
-                                self.user_button_text = "PROFILE"
+                                self.user_button_text = self.username.upper()
 
 
 

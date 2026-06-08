@@ -59,7 +59,7 @@ cards = {
     ("BLUE", "REVERSE"): (5, 2),
 
     ("WILD", "DRAW_FOUR"): (5, 3),
-    ("WILD","CHANGE"): (5, 4)
+    ("WILD","CHANGE"): (5, 5)
 }
 
 plain_cards = {
@@ -76,7 +76,7 @@ def get_card(card):
         row,col = cards[card]
     else:
         if card in plain_cards.keys():
-            pic = pygame.image.load(r'../Assets/Pictures/plain_cards.jpg')
+            pic = pygame.image.load(r'../Assets/Pictures/plain_cards.png')
             row,col = plain_cards[card]
 
     x_pos = col * 33
