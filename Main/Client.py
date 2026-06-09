@@ -210,7 +210,8 @@ def listen_to_server(sock: socket.socket,screen):
             elif code == "TURN":
                 ui_request.append(UIChange(
                     where="play_room",
-                    action="turn"
+                    action="turn",
+                    data=fields[1]
                 ))
 
             elif code == "PCOUNT":

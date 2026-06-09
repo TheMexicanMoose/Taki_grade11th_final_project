@@ -50,6 +50,7 @@ def delete_state(sock):
         socket_state.pop(sock, None)
 
 
+
 def create_user(username, password, name, email):
     success, msg = add_user(async_mgr.users, username, password, name, email)
     return msg
@@ -166,7 +167,7 @@ class Room(threading.Thread):
     def start_game(self):
         if self.player_count() <= 1:
             player, data = next(iter(self.players.items()))
-            async_mgr.put_msg_by_user( "NOP",[player],data["state"]["key"])
+            async_mgr.put_msg_by_user( "NOP",player,data["state"]["key"])
         else:
             for p,inf in self.players.items():
                 async_mgr.put_msg_by_user(f"RSTR|the game has started",p, inf["state"]["key"])
@@ -222,7 +223,8 @@ class Room(threading.Thread):
 
                 elif self.two_next:
                     if any(c[1] == "DRAW_TWO" for c in info["cards"]):
-                        async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
+                        for p, inf in self.players.items():
+                            async_mgr.put_msg_by_user(f"TURN|{player}", p, inf["state"]["key"])
                         card = ast.literal_eval(self.play_queue.get()[1][0])
                         if card[1] == 'DRAW_TWO':
                             with self.lock:
@@ -262,7 +264,8 @@ class Room(threading.Thread):
                             f"PCOUNT|{counts}",p,inf["state"]["key"]
                         )
 
-                    async_mgr.put_msg_by_user("TURN", player, info["state"]["key"])
+                    for p, inf in self.players.items():
+                        async_mgr.put_msg_by_user(f"TURN|{player}", p, inf["state"]["key"])
                     print("hooo")
                     action = self.play_queue.get()
 

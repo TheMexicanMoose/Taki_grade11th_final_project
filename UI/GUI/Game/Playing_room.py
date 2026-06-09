@@ -3,6 +3,7 @@ __author__ = "Noam"
 import time
 
 import pygame
+from PIL.ImageChops import screen
 
 from Helpers.tcp_by_size import send_with_size
 from UI.UI_helpers.Button import Button
@@ -55,10 +56,11 @@ class PlayingRoom:
             ]
         self.card_img = pygame.image.load(r'../Assets/Pictures/uno_card.png')
         self.card_norm_img = pygame.transform.scale(self.card_img, (self.card_img.get_width() * scale, self.card_img.get_height() * scale))
+        self.arrow_img = pygame.image.load(r'../Assets/Pictures/arrow.png')
 
         self.player_slots = [(280,320),(25,150),(300,20),(450,200)]
 
-        self.player_cards = [(50,50),(150,45),(425,20)]
+
 
         self.title = "Waiting Room"
 
@@ -99,7 +101,9 @@ class PlayingRoom:
 
         )
 
+
         return  start_button
+
 
     def build_add_card(self):
         get_card_button = Button(
@@ -189,8 +193,12 @@ class PlayingRoom:
 
             orientation = pid *90
             img = pygame.transform.rotate(self.card_img,orientation)
-            hand_x = self.player_cards[pid][0] * scale
-            hand_y = self.player_cards[pid][1] * scale
+            hand_x = self.player_slots[pid][0] * scale
+            hand_y = self.player_slots[pid][1] * scale
+            if pid % 2 == 0:
+                hand_y += 75
+            else:
+                hand_x += 225
             hand_w = 250
             hand_h = 75
 
@@ -379,7 +387,10 @@ class PlayingRoom:
 
                     elif event.get_action() == "turn":
                         print("turn")
-                        self.is_turn = True
+                        if event.get_data() == self.username:
+                            self.is_turn = True
+                        print(self.players)
+
                         self.ui_queue.remove(event)
 
                     elif event.get_action() == "count":
@@ -397,6 +408,7 @@ class PlayingRoom:
                         pygame.display.flip()
 
                         time.sleep(1)
+                        self.ui_queue.remove(event)
 
                     elif event.get_action() == "win":
                         win_text = get_font(300).render(f'{event.get_data()} WON!!', True, "yellow")
