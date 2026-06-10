@@ -49,35 +49,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Async.executor": "Run",
-    "Python.Button.executor": "Run",
-    "Python.Client.executor": "Run",
-    "Python.DataBase.executor": "Run",
-    "Python.Email_new_pass.executor": "Run",
-    "Python.Login-Sign-Up-Dropdown.executor": "Run",
-    "Python.Login.executor": "Run",
-    "Python.Login_Sign_Up_Dropdown.executor": "Run",
-    "Python.Main_manu.executor": "Run",
-    "Python.Main_menu.executor": "Run",
-    "Python.Options.executor": "Run",
-    "Python.Playing_room.executor": "Run",
-    "Python.Rooms_list.executor": "Run",
-    "Python.Server.executor": "Run",
-    "Python.Text_Input.executor": "Run",
-    "Python.Waiting_room.executor": "Run",
-    "Python.sign_up.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Pictures"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Async.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Button.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Client.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DataBase.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Email_new_pass.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login-Sign-Up-Dropdown.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Login_Sign_Up_Dropdown.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_manu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Options.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Playing_room.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Rooms_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Text_Input.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Waiting_room.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sign_up.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/noamg/GitHub/Taki_grade11th_final_project/Assets/Pictures&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\noamg\GitHub\Taki_grade11th_final_project\Assets\Pictures" />

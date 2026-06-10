@@ -9,7 +9,6 @@ import random as rnd
 import json
 import ast
 
-from sympy import false
 
 from Helpers.tcp_by_size import recv_by_size, send_with_size
 from Helpers.Async import Async
@@ -135,7 +134,7 @@ class Room(threading.Thread):
             return 'successfully joined'
 
     def del_player(self, username,state):
-        is_host = false
+        is_host = False
         with self.lock:
             if username in self.players:
                 is_host = self.players[username].get("is_host", False)
