@@ -48,6 +48,8 @@ def get_state(sock):
 def delete_state(sock):
     with state_lock:
         socket_state.pop(sock, None)
+        username = async_mgr.user_by_sock[sock]
+        log_in_users.remove(username)
 
 
 
@@ -579,8 +581,8 @@ class ClientHandler(threading.Thread):
         print("jj")
         with lock:
             print("kk")
-            async_mgr.delete_socket(self.sock)
             delete_state(self.sock)
+            async_mgr.delete_socket(self.sock)
             print(f"Closing sock {self.cid}")
             self.sock.close()
 
